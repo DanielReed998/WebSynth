@@ -1,18 +1,37 @@
 {
-  "name": "personal-project",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.16.2",
-    "pg": "^7.4.0",
-    "react": "^16.2.0",
-    "react-redux": "^5.0.6",
-    "sequelize": "^4.28.1"
-  }
+    "name": "personal-project",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start:dev": "webpack -w",
+        "start": "nodemon main"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.17.1",
+        "body-parser": "^1.18.2",
+        "express": "^4.16.2",
+        "pg": "^7.4.0",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "react-redux": "^5.0.6",
+        "react-router-dom": "^4.2.2",
+        "react-webaudio": "^0.3.0-EXPERIMENTAL",
+        "redux": "^3.7.2",
+        "sequelize": "^4.28.1"
+    },
+    "devDependencies": {
+        "babel": "^6.23.0",
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-preset-es2015": "^6.3.13",
+        "babel-preset-es2016": "^6.24.1",
+        "babel-preset-react": "^6.24.1",
+        "morgan": "^1.9.0",
+        "volleyball": "^1.4.1",
+        "webpack": "^3.10.0"
+    }
 }
