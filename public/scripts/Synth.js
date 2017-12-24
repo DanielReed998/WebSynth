@@ -1,5 +1,3 @@
-
-
 var waveformSelect = document.getElementById('waveform');
 var waveImg = document.getElementById('wave-img');
 
@@ -62,15 +60,17 @@ class Note {
     constructor(frequency){
         this.frequency = frequency * Math.pow(2, (parseInt(octave.value)));
         this.waveform = waveformSelect.value;
+        this.osc = audioContext.createOscillator();
+        this.dist = audioContext.createWaveShaper();
+        this.gainNode = audioContext.createGain();
         this.oscillators = [];
     }
 
     start() {
-        let osc = audioContext.createOscillator();
-        let dist = audioContext.createWaveShaper();
-
-        osc.frequency.value = this.frequency;
-        dist.curve = makeDistortionCurve(parseInt(distortion.value));
+        
+        this.osc.frequency.value = this.frequency;
+        this.dist.curve = makeDistortionCurve(parseInt(distortion.value));
+        this.gainNode.gain.value = 1;
 
         if (this.waveform === 'custom') {
 
@@ -78,21 +78,26 @@ class Note {
             var imag = new Float32Array([1, 0.5, 0, -0.5, -1]);
      
             var wave = audioContext.createPeriodicWave(real, imag);         
-            osc.setPeriodicWave(wave);
+            this.osc.setPeriodicWave(wave);
         } else {
-            osc.type = this.waveform;            
+            this.osc.type = this.waveform;            
         }
+
         
-        osc.connect(dist);
-        dist.connect(audioContext.destination);
-        osc.start(0);
-        this.oscillators.push(osc);
+        this.osc.connect(this.dist);
+        this.dist.connect(this.gainNode);
+        this.gainNode.connect(audioContext.destination)
+        this.osc.start(0);
+        this.oscillators.push(this.osc);
     }
 
     stop() {
-        this.oscillators.forEach(osc => {
-            osc.stop(0);
-            osc.disconnect();
+        this.oscillators.forEach(osc => {          
+            this.gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.2);
+            osc.stop(audioContext.currentTime + 0.2);
+            setTimeout(() => {
+                osc.disconnect();
+            }, 300);
         })
     }
 };
