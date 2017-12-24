@@ -1,4 +1,5 @@
 
+
 var waveformSelect = document.getElementById('waveform');
 var waveImg = document.getElementById('wave-img');
 
@@ -15,6 +16,14 @@ setWaveImg();
 
 waveformSelect.addEventListener('change', e => {
     setWaveImg();
+})
+
+var openKeyboard = document.getElementById('open-keyboard-btn');
+var keyboard = document.getElementById('keyboard');
+openKeyboard.addEventListener('click', () => {
+    keyboard.classList.toggle('hidden');
+    if (openKeyboard.innerText === 'Open Keyboard') openKeyboard.innerText = 'Close Keyboard';
+    else openKeyboard.innerText = 'Open Keyboard';
 })
 
 var gKey = document.getElementById('g');
@@ -51,7 +60,7 @@ var audioContext = new AudioContext();
 
 class Note { 
     constructor(frequency){
-        this.frequency = frequency * Math.pow(2, (parseInt(octave.value) - 1));
+        this.frequency = frequency * Math.pow(2, (parseInt(octave.value)));
         this.waveform = waveformSelect.value;
         this.oscillators = [];
     }
@@ -137,28 +146,15 @@ document.addEventListener('keydown', e => {
         default:
             return;
     } 
-    if(!activeNotes[code]) {
+    if(!activeNotes[code] && !keyboard.classList.contains('hidden')) {
         let note = new Note(frequency);
         activeNotes[code] = note;
         keyCodeCombo[code].classList.add('active');
         note.start();
     }
     
-    var count = 0;
-    var noteFrequencies = [];
-    Object.keys(activeNotes).forEach(key => {
-        if (activeNotes[key]) {
-            count++;
-            noteFrequencies.push(activeNotes[key].frequency);
-        }
-    })
-    if (count === 3) {
-        noteFrequencies.sort();
-        freq1 = noteFrequencies[0];
-        freq2 = noteFrequencies[1];
-        freq3 = noteFrequencies[2];        
-        changeBackground(freq1, freq2, freq3);
-    }
+    checkChord();
+
 })
 
 document.addEventListener('keyup', e => {
@@ -170,6 +166,24 @@ document.addEventListener('keyup', e => {
         keyCodeCombo[code].classList.remove('active');
     }
 })
+
+function checkChord() {
+    var count = 0;
+    var noteFrequencies = [];
+    Object.keys(activeNotes).forEach(key => {
+        if (activeNotes[key]) {
+            count++;
+            noteFrequencies.push(activeNotes[key].frequency);
+        }
+    })
+    if (count === 3) {
+        noteFrequencies.sort();
+        let freq1 = noteFrequencies[0];
+        let freq2 = noteFrequencies[1];
+        let freq3 = noteFrequencies[2];        
+        changeBackground(freq1, freq2, freq3);
+    }
+}
 
 function changeBackground(freq1, freq2, freq3) {
     var body = document.getElementById('body');
@@ -228,4 +242,33 @@ function makeDistortionCurve( amount ) {
       curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
     }
     return curve;
-  }
+}
+
+var width = 16;
+var height = 14;
+
+var machineBody = document.createElement('tbody');
+machineBody.classList.add('machine');
+let tableHTML = '';
+for (var h = 0; h < height; h++) {
+    tableHTML += "<tr id='row+" + h + "'>";
+    for (var w = 0; w < width; w++) {
+        if (w%4 === 0){
+            tableHTML += "<td data-status='dead' id='" + w + "-" + h + "' class='fourth'></td>";
+        } else {
+            tableHTML += "<td data-status='dead' id='" + w + "-" + h + "'></td>";            
+        }
+    }
+    tableHTML += "</tr>";
+}
+machineBody.innerHTML = tableHTML;
+
+var machineTable = document.getElementById('machine-table')
+machineTable.appendChild(machineBody);
+
+var openMachine = document.getElementById('open-machine-btn');
+openMachine.addEventListener('click', () => {
+    machineTable.classList.toggle('hidden');
+    if (openMachine.innerText === 'Open Synth Machine') openMachine.innerText = 'Close Synth Machine';
+    else openMachine.innerText = 'Open Synth Machine';
+})

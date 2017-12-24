@@ -25,11 +25,14 @@
                     <option value="sawtooth">sawtooth</option>
                     <option value="custom">custom</option>
                 </select>
-                <input id="distortion" placeholder="distortion" value="0" />
-                <input id="octave" placeholder="octave" value="0" />
+                <label>Distortion: </label>
+                <input id="distortion" type="range" class="slider" min="0" max="100" value="0" />
+                <label>Octave: </label>
+                <input id="octave" type="range" class="slider" min="0" max="3" value="0" />
             </div>
             <br>
-            <div id="keyboard">
+            <button id="open-keyboard-btn" class="btn btn-primary">Open Keyboard</button>
+            <div id="keyboard" class="hidden">
                 <div id="sharps">
                     <button id="g-sharp" class="sharp-note">g#</button>
                     <button id="a-sharp" class="sharp-note">a#</button>
@@ -50,6 +53,8 @@
                     <button id="high-g" class="regular-note"></button>
                 </div>
             </div>
+            <button id="open-machine-btn" class="btn btn-primary">Open Synth Machine</button>
+            <table id="machine-table" class="hidden"></table>
         </div>
     </div>
 </body>

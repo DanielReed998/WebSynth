@@ -1,12 +1,11 @@
 button {
-    border-radius: 10px;
+    border-radius: 5px;
     font-size: 20px;
 }
 
 #main {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
 }
 
@@ -49,6 +48,12 @@ button {
 #keyboard {
     display: flex;
     position: relative;
+    height: 16rem;
+    margin: 20px;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 #regulars {
@@ -105,4 +110,20 @@ button {
 
 .grey {
     background-color: green;
+}
+
+#machine-table {
+    margin: 20px;
+    border: 1px solid #ddd;
+    width: 400px;
+    height: 400px;
+    background-color: white;
+}
+
+td {
+    border: 1px solid lightgray;
+}
+
+.fourth {
+    background-color: rgb(240, 238, 238);
 }
