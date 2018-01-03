@@ -3402,7 +3402,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router_dom__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_redux__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Main__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__store__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__store__ = __webpack_require__(117);
 
 
 
@@ -25456,7 +25456,7 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Navbar__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Footer__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Home__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_NewPage__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Keyboard__ = __webpack_require__(116);
 
 
 
@@ -25478,8 +25478,7 @@ function Main() {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["e" /* Switch */],
                 null,
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { exact: true, path: '/', component: __WEBPACK_IMPORTED_MODULE_5__components_Home__["a" /* default */] }),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { exact: true, path: '/anotherPage', component: __WEBPACK_IMPORTED_MODULE_6__components_NewPage__["a" /* default */] }),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { exact: true, path: '/', component: __WEBPACK_IMPORTED_MODULE_6__components_Keyboard__["a" /* default */] }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["c" /* Redirect */], { to: '/', component: __WEBPACK_IMPORTED_MODULE_5__components_Home__["a" /* default */] })
             )
         ),
@@ -25534,9 +25533,6 @@ function Footer() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__WebAudio__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__WebAudio___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__WebAudio__);
-
 
 
 
@@ -25554,7 +25550,7 @@ function Home() {
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'select',
-                { ref: 'waveform', onchange: 'setType(this);' },
+                { ref: 'waveform' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'option',
                     { value: 'sine' },
@@ -25575,11 +25571,6 @@ function Home() {
                     { value: 'triangle' },
                     'Triangle'
                 )
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'button',
-                { onClick: Object(__WEBPACK_IMPORTED_MODULE_2__WebAudio__["play"])() },
-                'Play'
             )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -25592,55 +25583,331 @@ function Home() {
 
 /***/ }),
 /* 116 */
-/***/ (function(module, exports) {
-
-var audioContext = new AudioContext();
-var osc;
-
-function play() {
-  osc = audioContext.createOscillator();
-  osc.frequency.value = 440;
-  console.log(document.getElementById('#waveform'));
-  debugger;
-  osc.type = document.getElementById('waveform').val();
-  osc.connect(audioContext.destination);
-  osc.start(0);
-}
-
-function stop() {
-  osc.disconnect();
-}
-
-function setType(select) {
-  if (osc) {
-    osc.type = select.value;
-  }
-}
-
-function toggle() {
-  document.getElementsByTagName('button').toggle();
-}
-
-/***/ }),
-/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = Home;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 
 
-function Home() {
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        null,
-        'Another Page'
-    );
+const keys = {
+    gKey: {
+        element: document.getElementById('g'),
+        code: 65,
+        frequency: 196
+    },
+    gSharpKey: {
+        element: document.getElementById('g-sharp'),
+        code: 87,
+        frequency: 207.7
+    },
+    aKey: {
+        element: document.getElementById('a'),
+        code: 83,
+        frequency: 220
+    },
+    aSharpKey: {
+        element: document.getElementById('a-sharp'),
+        code: 69,
+        frequency: 233.1
+    },
+    bKey: {
+        element: document.getElementById('b'),
+        code: 68,
+        frequency: 246.9
+    },
+    cKey: {
+        element: document.getElementById('c'),
+        code: 70,
+        frequency: 261.6
+    },
+    cSharpKey: {
+        element: document.getElementById('c-sharp'),
+        code: 84,
+        frequency: 277.2
+    },
+    dKey: {
+        element: document.getElementById('d'),
+        code: 71,
+        frequency: 293.7
+    },
+    dSharpKey: {
+        element: document.getElementById('d-sharp'),
+        code: 89,
+        frequency: 311.1
+    },
+    eKey: {
+        element: document.getElementById('e'),
+        code: 72,
+        frequency: 329.6
+    },
+    fKey: {
+        element: document.getElementById('f'),
+        code: 74,
+        frequency: 349.2
+    },
+    fSharpKey: {
+        element: document.getElementById('f-sharp'),
+        code: 73,
+        frequency: 370
+    },
+    highGKey: {
+        element: document.getElementById('high-g'),
+        code: 75,
+        frequency: 392
+    }
+};
+
+class Note {
+    constructor(frequency, audioContext) {
+        this.frequency = frequency;
+        this.audioContext = audioContext;
+        this.waveform = 'sine';
+        this.osc = audioContext.createOscillator();
+        this.gainNode = audioContext.createGain();
+        this.oscillators = [];
+    }
+
+    start() {
+
+        this.osc.frequency.value = this.frequency;
+        this.gainNode.gain.value = 1;
+
+        if (this.waveform === 'custom') {
+
+            var real = new Float32Array([-1, -0.5, 0, 0.5, 1]);
+            var imag = new Float32Array([1, 0.5, 0, -0.5, -1]);
+
+            var wave = this.audioContext.createPeriodicWave(real, imag);
+            this.osc.setPeriodicWave(wave);
+        } else {
+            this.osc.type = this.waveform;
+        }
+
+        this.osc.connect(this.gainNode);
+        this.gainNode.connect(this.audioContext.destination);
+        this.osc.start(0);
+        this.oscillators.push(this.osc);
+    }
+
+    stop() {
+        this.oscillators.forEach(osc => {
+            this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.2);
+            osc.stop(this.audioContext.currentTime + 0.2);
+            setTimeout(() => {
+                osc.disconnect();
+            }, 300);
+        });
+    }
+};
+
+class Keyboard extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            audioContext: new AudioContext(),
+            keys: keys
+        };
+        this.activeNotes = {};
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handleKeyUp = this.handleKeyUp.bind(this);
+        this.checkChord = this.checkChord.bind(this);
+    }
+
+    handleKeyDown(e) {
+        let keyboard = document.getElementById('keyboard');
+        let code = e.keyCode ? e.keyCode : e.which;
+
+        if (!this.activeNotes[code] && !keyboard.classList.contains('hidden')) {
+            let note = new Note(this.frequency, this.audioContext);
+            this.activeNotes[code] = note;
+            this.keys.element.classList.add('active');
+            note.start();
+        }
+
+        this.checkChord();
+    }
+
+    handleKeyUp(e) {
+        let code = e.keyCode ? e.keyCode : e.which;
+        if (this.activeNotes) {
+            this.activeNotes[code].stop();
+            this.activeNotes[code] = null;
+            this.state.keys.element.classList.remove('active');
+        }
+    }
+
+    checkChord() {
+        var count = 0;
+        var noteFrequencies = [];
+        Object.keys(this.activeNotes).forEach(key => {
+            if (this.activeNotes[key]) {
+                count++;
+                noteFrequencies.push(this.activeNotes[key].frequency);
+            }
+        });
+        if (count === 3) {
+            noteFrequencies.sort();
+            let freq1 = noteFrequencies[0];
+            let freq2 = noteFrequencies[1];
+            let freq3 = noteFrequencies[2];
+            changeBackground(freq1, freq2, freq3);
+        }
+
+        function changeBackground(freq1, freq2, freq3) {
+            var body = document.getElementById('body');
+            if (major(freq1, freq2, freq3)) {
+                body.classList = 'container';
+                body.classList.add('orange');
+            } else if (minor(freq1, freq2, freq3)) {
+                body.classList = 'container';
+                body.classList.add('blue');
+            } else {
+                body.classList = 'container';
+                body.classList.add('grey');
+            }
+        }
+
+        function major(freq1, freq2, freq3) {
+            return Math.abs(freq2 / 5 - freq1 / 4) < 1 && Math.abs(freq3 / 6 - freq1 / 4) < 1 || Math.abs(freq2 / 6 - freq1 / 5) < 1 && Math.abs(freq3 / 8 - freq1 / 5) < 1 || Math.abs(freq2 / 4 - freq1 / 3) < 1 && Math.abs(freq3 / 5 - freq1 / 3) < 1;
+        }
+
+        function minor(freq1, freq2, freq3) {
+            return Math.abs(freq2 / 12 - freq1 / 10) < 1 && Math.abs(freq3 / 15 - freq1 / 10) < 1 || Math.abs(freq2 / 15 - freq1 / 12) < 1 && Math.abs(freq3 / 20 - freq1 / 12) < 1 || Math.abs(freq2 / 20 - freq1 / 15) < 1 && Math.abs(freq3 / 24 - freq1 / 15) < 1;
+        }
+    }
+
+    render() {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { id: 'main', className: 'container-fluid', onKeyDown: this.handleKeyDown, onKeyUp: this.handleKeyUp },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'h1',
+                null,
+                'Party'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { id: 'functionality' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { id: 'waveform-container' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { id: 'wave-img' }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'select',
+                        { id: 'waveform' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'option',
+                            { value: 'sine' },
+                            'sine'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'option',
+                            { value: 'square' },
+                            'square'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'option',
+                            { value: 'triangle' },
+                            'triangle'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'option',
+                            { value: 'sawtooth' },
+                            'sawtooth'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'option',
+                            { value: 'custom' },
+                            'custom'
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'label',
+                        null,
+                        'Distortion: '
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: 'distortion', type: 'range', className: 'slider', min: '0', max: '100', defaultValue: '0' }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'label',
+                        null,
+                        'Octave: '
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: 'octave', type: 'range', className: 'slider', min: '0', max: '3', defaultValue: '0' })
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    { id: 'open-keyboard-btn', className: 'btn btn-primary' },
+                    'Open Keyboard'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { id: 'keyboard' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { id: 'sharps' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { id: 'g-sharp', className: 'sharp-note' },
+                            'g#'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { id: 'a-sharp', className: 'sharp-note' },
+                            'a#'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'b-sharp', className: 'fake-sharp-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { id: 'c-sharp', className: 'sharp-note' },
+                            'c#'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { id: 'd-sharp', className: 'sharp-note' },
+                            'd#'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'e-sharp', className: 'fake-sharp-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { id: 'f-sharp', className: 'sharp-note' },
+                            'f#'
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { id: 'regulars' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { id: 'g', className: 'regular-note' },
+                            'G3'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'a', className: 'regular-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'b', className: 'regular-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'c', className: 'regular-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'd', className: 'regular-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'e', className: 'regular-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'f', className: 'regular-note' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { id: 'high-g', className: 'regular-note' })
+                    )
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    { id: 'open-machine-btn', className: 'btn btn-primary' },
+                    'Open Synth Machine'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('table', { id: 'machine-table', className: 'hidden' })
+            )
+        );
+    }
 }
+/* harmony export (immutable) */ __webpack_exports__["a"] = Keyboard;
+
 
 /***/ }),
-/* 118 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

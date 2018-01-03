@@ -11,10 +11,10 @@
 </head>
 
 <body id="body" class="container center">
-    <!--<div id="client"></div>
-    <script async defer src="/bundle.js"></script>-->
+    <!-- <div id="client"></div>
+    <script async defer src="/bundle.js"></script> -->
     <div id="main" class="container-fluid">
-        <h1>Party</h1>
+        <h1 id="title">Party</h1>
         <div id="functionality">
             <div id="waveform-container">
                 <div id="wave-img"></div>
@@ -31,8 +31,8 @@
                 <input id="octave" type="range" class="slider" min="0" max="3" value="0" />
             </div>
             <br>
-            <button id="open-keyboard-btn" class="btn btn-primary">Open Keyboard</button>
-            <div id="keyboard" class="hidden">
+            <!-- <button id="open-keyboard-btn" class="btn btn-primary">Open Keyboard</button> -->
+            <div id="keyboard">
                 <div id="sharps">
                     <button id="g-sharp" class="sharp-note">g#</button>
                     <button id="a-sharp" class="sharp-note">a#</button>
@@ -54,7 +54,11 @@
                 </div>
             </div>
             <button id="open-machine-btn" class="btn btn-primary">Open Synth Machine</button>
-            <table id="machine-table" class="hidden"></table>
+            <div id="table-container">
+                <label>Tempo: </label>
+                <input id="tempo" type="range" class="slider" min="100" max="1950" value="1800" />
+                <table id="machine-table"></table>
+            </div>
         </div>
     </div>
 </body>

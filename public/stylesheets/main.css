@@ -127,3 +127,15 @@ td {
 .fourth {
     background-color: rgb(240, 238, 238);
 }
+
+.active-note {
+    background-color: rgb(138, 137, 177)
+}
+
+.beat {
+    background-color: rgb(112, 109, 109);
+}
+
+#sequencer-btns {
+    margin-bottom: 20px;
+}

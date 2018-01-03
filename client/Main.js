@@ -5,8 +5,7 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './components/Home';
-import NewPage from './components/NewPage';
-
+import Keyboard from './components/Keyboard';
 
 function Main () {
      
@@ -15,8 +14,7 @@ function Main () {
             <Navbar />
             <main>
                 <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/anotherPage" component={NewPage} />
+                    <Route exact path="/" component={Keyboard} />
                     <Redirect to="/" component={Home} />
                 </Switch>
             </main>

@@ -1,3 +1,17 @@
+let party = document.getElementById('title');
+let colors = [
+    "aqua",
+    "chartreuse",
+    "red",
+    "fuschia",
+    "blue-violet",
+    "yellow",
+    "coral"
+]
+setInterval(() => {
+    party.style.color = colors[Math.floor(Math.random() * colors.length)]
+}, 500);
+
 var waveformSelect = document.getElementById('waveform');
 var waveImg = document.getElementById('wave-img');
 
@@ -16,14 +30,15 @@ waveformSelect.addEventListener('change', e => {
     setWaveImg();
 })
 
-var openKeyboard = document.getElementById('open-keyboard-btn');
-var keyboard = document.getElementById('keyboard');
-openKeyboard.addEventListener('click', () => {
-    keyboard.classList.toggle('hidden');
-    if (openKeyboard.innerText === 'Open Keyboard') openKeyboard.innerText = 'Close Keyboard';
-    else openKeyboard.innerText = 'Open Keyboard';
-})
+// var openKeyboard = document.getElementById('open-keyboard-btn');
+// var keyboard = document.getElementById('keyboard');
+// openKeyboard.addEventListener('click', () => {
+//     keyboard.classList.toggle('hidden');
+//     if (openKeyboard.innerText === 'Open Keyboard') openKeyboard.innerText = 'Close Keyboard';
+//     else openKeyboard.innerText = 'Open Keyboard';
+// })
 
+//modular
 var gKey = document.getElementById('g');
 var gSharpKey = document.getElementById('g-sharp');
 var aKey = document.getElementById('a');
@@ -38,6 +53,7 @@ var fKey = document.getElementById('f');
 var fSharpKey = document.getElementById('f-sharp');
 var highGKey = document.getElementById('high-g');
 
+//modular
 var keyCodeCombo = {
     65: gKey,
     87: gSharpKey,
@@ -93,8 +109,8 @@ class Note {
 
     stop() {
         this.oscillators.forEach(osc => {          
-            this.gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.2);
-            osc.stop(audioContext.currentTime + 0.2);
+            this.gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.1);
+            osc.stop(audioContext.currentTime + 0.1);
             setTimeout(() => {
                 osc.disconnect();
             }, 300);
@@ -104,54 +120,53 @@ class Note {
 
 let activeNotes = {};
 
-document.addEventListener('keydown', e => {
-    let code = e.keyCode ? e.keyCode : e.which;
+function playNote(code) {
     let waveform = waveformSelect.value;
     let frequency;
     switch (code) {
         case 65: //a key, g 
-            frequency = 196;
+            frequency = 196 / 2;
             break;
         case 87: //w key, g sharp
-            frequency = 207.7;
+            frequency = 207.7 / 2;
             break;
         case 83: //s key, a
-            frequency = 220;
+            frequency = 220 / 2;
             break;
         case 69: //e key, a sharp
-            frequency = 233.1;
+            frequency = 233.1 / 2;
             break;
         case 68: //d key, b
-            frequency = 246.9;
+            frequency = 246.9 / 2;
             break;
         case 70: //f key, c
-            frequency = 261.6;
+            frequency = 261.6 / 2;
             break;
         case 84: //t key, c sharp
-            frequency = 277.2;
+            frequency = 277.2 / 2;
             break;
         case 71: //g key, d
-            frequency = 293.7;
+            frequency = 293.7 / 2;
             break;
         case 89: //y key, d sharp
-            frequency = 311.1;
+            frequency = 311.1 / 2;
             break;
         case 72: //h key, e
-            frequency = 329.6;
+            frequency = 329.6 / 2;
             break;  
         case 74: //j key, f
-            frequency = 349.2;
+            frequency = 349.2 / 2;
             break;
         case 73: //i key, f sharp
-            frequency = 370;
+            frequency = 370 / 2;
             break;
         case 75: //k key, high g
-            frequency = 392;
+            frequency = 392 / 2;
             break;
         default:
             return;
     } 
-    if(!activeNotes[code] && !keyboard.classList.contains('hidden')) {
+    if(!activeNotes[code]) {
         let note = new Note(frequency);
         activeNotes[code] = note;
         keyCodeCombo[code].classList.add('active');
@@ -160,16 +175,25 @@ document.addEventListener('keydown', e => {
     
     checkChord();
 
-})
+}
 
-document.addEventListener('keyup', e => {
-    let code = e.keyCode ? e.keyCode : e.which;
+function stopNote(code) {
     if (activeNotes[code]) {
         activeNotes[code].stop();
         activeNotes[code] = null;
         
         keyCodeCombo[code].classList.remove('active');
     }
+}
+
+document.addEventListener('keydown', e => {
+    let code = e.keyCode ? e.keyCode : e.which;
+    playNote(code);
+})
+
+document.addEventListener('keyup', e => {
+    let code = e.keyCode ? e.keyCode : e.which;
+    stopNote(code);
 })
 
 function checkChord() {
@@ -249,19 +273,81 @@ function makeDistortionCurve( amount ) {
     return curve;
 }
 
+
+/**
+ * start the synth machine code here.
+ */
+
+const notes = {
+    g: { 
+        frequency: 196,
+        code: 65
+    },
+    gSharp: {
+        frequency: 207.7,
+        code: 87
+    },
+    a: {
+        frequency: 220,
+        code: 83
+    },
+    aSharp: {
+        frequency: 233.1,
+        code: 69
+    },
+    b: {
+        frequency: 246.9,
+        code: 68
+    },
+    c: {
+        frequency: 261.6,
+        code: 70
+    },
+    cSharp: {
+        frequency: 277.2,
+        code: 84
+    },
+    d: {
+        frequency: 293.7,
+        code: 71
+    },
+    dSharp: {
+        frequency: 311.1,
+        code: 89
+    },
+    e: {
+        frequency: 329.6,
+        code: 72
+    },
+    f: {
+        frequency: 349.2,
+        code: 74
+    },
+    fSharp: {
+        frequency: 370,
+        code: 73
+    },
+    highG: {
+        frequency: 392,
+        code: 75
+    }
+};
+
+const noteArray = Object.keys(notes).reverse();
+
 var width = 16;
-var height = 14;
+var height = noteArray.length;
 
 var machineBody = document.createElement('tbody');
 machineBody.classList.add('machine');
 let tableHTML = '';
-for (var h = 0; h < height; h++) {
-    tableHTML += "<tr id='row+" + h + "'>";
-    for (var w = 0; w < width; w++) {
-        if (w%4 === 0){
-            tableHTML += "<td data-status='dead' id='" + w + "-" + h + "' class='fourth'></td>";
+for (var note = 0; note < height; note++) {
+    tableHTML += "<tr id='row" + noteArray[note] + "'>";
+    for (var beat = 0; beat < width; beat++) {
+        if (beat%4 === 0){
+            tableHTML += "<td id='" + beat + "-" + noteArray[note] + "' class='fourth'></td>";
         } else {
-            tableHTML += "<td data-status='dead' id='" + w + "-" + h + "'></td>";            
+            tableHTML += "<td id='" + beat + "-" + noteArray[note] + "' class=''></td>";            
         }
     }
     tableHTML += "</tr>";
@@ -270,6 +356,26 @@ machineBody.innerHTML = tableHTML;
 
 var machineTable = document.getElementById('machine-table')
 machineTable.appendChild(machineBody);
+var tableContainer = document.getElementById('table-container');
+var sequencerButtons = document.createElement('div');
+sequencerButtons.innerHTML = "<div id=\'sequencer-btns\'>" + '\n' 
+                                + "<button id=\'start-machine\' class=\'btn btn-primary\'>Start Sequencer</button>" + '\n'
+                                + "<button id=\'stop-machine\' class=\'btn btn-danger\'>Stop Sequencer</button>" + '\n'
+                            + "</div>";
+tableContainer.appendChild(sequencerButtons);
+
+function setupEvents() {
+    for (let i = 0; i < width; i++) {
+        for (let j = 0; j < height; j++) {
+            let noteBox = document.getElementById(`${i}-${noteArray[j]}`);
+            noteBox.addEventListener('click', () => {
+                noteBox.classList.toggle('active-note');
+            })
+        }
+    }
+}
+
+setupEvents();
 
 var openMachine = document.getElementById('open-machine-btn');
 openMachine.addEventListener('click', () => {
@@ -277,3 +383,52 @@ openMachine.addEventListener('click', () => {
     if (openMachine.innerText === 'Open Synth Machine') openMachine.innerText = 'Close Synth Machine';
     else openMachine.innerText = 'Open Synth Machine';
 })
+
+let interval = null;
+var beat = 0;
+var tempo = 2000 - document.getElementById('tempo').value;
+
+function startInterval() {
+    interval = setInterval(()=> {
+        //each beat, go through all the notes
+        for (let note = 0; note < height; note++) {
+            //change the background of all the notes in the last beat back to white.
+            let lastBeat = beat === 0 ? 15 : beat - 1;
+            let lastNoteBox = document.getElementById(`${lastBeat}-${noteArray[note]}`)
+            if (lastNoteBox.classList.contains('beat')) lastNoteBox.classList.toggle('beat');
+
+            //if any of the last notes are playing, stop them
+            if (lastNoteBox.classList.contains('active-note')){
+                console.log()
+                stopNote(notes[noteArray[note]].code);
+            }
+
+            //change the background of all the notes in the current beat
+            let noteBox = document.getElementById(`${beat}-${noteArray[note]}`);
+            noteBox.classList.toggle('beat');
+
+            //play any notes that are active
+            if (noteBox.classList.contains('active-note')){
+                playNote(notes[noteArray[note]].code);
+            }
+        }
+        beat = (beat+1)%16;
+    }, tempo)
+}
+
+document.getElementById('start-machine').addEventListener('click', startInterval);
+
+function stopInterval() {
+    if (interval) clearInterval(interval);
+    for (let note = 0; note < height; note++) {
+        let noteBox = document.getElementById(`${beat}-${noteArray[note]}`);
+        let lastBeat = beat === 0 ? 15 : beat - 1;
+        let lastNoteBox = document.getElementById(`${lastBeat}-${noteArray[note]}`)
+        if (noteBox.classList.contains('active-note') ||
+            lastNoteBox.classList.contains('active-note')){
+                stopNote(notes[noteArray[note]].code);
+        }
+    }
+}
+
+document.getElementById('stop-machine').addEventListener('click', stopInterval);
