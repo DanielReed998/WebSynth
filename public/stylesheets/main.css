@@ -13,7 +13,7 @@ button {
     width: 100%;
 }
 
-#waveform-container {
+#options-container {
     display: flex;
     flex-direction: column;
     width: 25%;
@@ -112,12 +112,24 @@ button {
     background-color: green;
 }
 
+.table-container {
+    display: flex;
+}
+
 #machine-table {
     margin: 20px;
     border: 1px solid #ddd;
     width: 400px;
     height: 400px;
     background-color: white;
+}
+
+#options-table {
+    margin: 20px;
+    border: 1px solid #ddd;
+    width: 400px;
+    height: 100px;
+    background-color: rgb(39, 39, 39);
 }
 
 td {
@@ -128,7 +140,12 @@ td {
     background-color: rgb(240, 238, 238);
 }
 
-.active-note {
+#options-table .fourth {
+    background-color: rgb(88, 87, 87);
+}
+
+.active-note,
+.active-option {
     background-color: rgb(138, 137, 177)
 }
 
@@ -136,6 +153,32 @@ td {
     background-color: rgb(112, 109, 109);
 }
 
+.table-labels {
+    background-color: rgba(201, 200, 200, 0.562);
+    border-radius: 5px;
+    margin: 20px 20px 20px -10px;
+    padding-left: 0px;
+}
+
+td {
+    width: 5%;
+}
+
+li {
+    list-style: none;
+    margin: 8px 0;
+    border: 1px solid black;
+}
+
 #sequencer-btns {
     margin-bottom: 20px;
+}
+
+.option-slider {
+    -webkit-appearance: slider-vertical;
+}
+
+#option-sliders {
+    display: flex;
+    background-color: rgba(201, 200, 200, 0.562);
 }

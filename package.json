@@ -14,6 +14,7 @@
         "axios": "^0.17.1",
         "babel-polyfill": "^6.26.0",
         "body-parser": "^1.18.2",
+        "classnames": "^2.2.5",
         "express": "^4.16.2",
         "pg": "^7.4.0",
         "react": "^16.2.0",
@@ -22,6 +23,8 @@
         "react-router-dom": "^4.2.2",
         "react-webaudio": "^0.3.0-EXPERIMENTAL",
         "redux": "^3.7.2",
+        "redux-devtools-extension": "^2.13.2",
+        "redux-thunk": "^2.2.0",
         "sequelize": "^4.28.1"
     },
     "devDependencies": {
@@ -32,6 +35,7 @@
         "babel-preset-es2016": "^6.24.1",
         "babel-preset-react": "^6.24.1",
         "morgan": "^1.9.0",
+        "redux-logger": "^3.0.6",
         "volleyball": "^1.4.1",
         "webpack": "^3.10.0"
     }

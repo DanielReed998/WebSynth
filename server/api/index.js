@@ -1,8 +1,8 @@
-const apiRouter = require('express').Router()
+const express = require('express');
+const apiRouter = express();
 
-
-apiRouter.get('/', (req, res, next) => {
-    res.send('your server is running!');
-})
+apiRouter.use('/sequences', require('./sequences'));
+apiRouter.use('/users', require('./users'));
 
 module.exports = apiRouter;
+
