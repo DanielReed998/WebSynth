@@ -21,7 +21,7 @@ class Functionality extends Component {
         this.handleKeyUp = this.handleKeyUp.bind(this); 
         this.checkChord = this.checkChord.bind(this);
     }
-    
+
     handleKeyDown(e) {
         let code = e.keyCode ? e.keyCode : e.which;
         
@@ -30,7 +30,9 @@ class Functionality extends Component {
             let frequency = codes[code].frequency * Math.pow(2, octave);
             let waveform = document.getElementById('waveform').value;
             let volume = document.getElementById('volume').value;
-            let note = new Note(frequency, this.audioContext, waveform, volume);
+            let distortion = document.getElementById('distortion').value;
+            let sustain = document.getElementById('sustain').value;
+            let note = new Note(frequency, this.audioContext, waveform, volume, distortion, sustain);
             this.activeNotes[code] = note;
             document.getElementById(codes[code].name).classList.add('active');
             note.start();
@@ -102,7 +104,9 @@ class Functionality extends Component {
         return (
             <div id="main" className="container-fluid" onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabIndex="0">
                 <Navbar />
-                <h1>Party</h1>
+                <div className="center title">
+                    <h1 className="center">Synth</h1>
+                </div>
                 <div id="functionality">
                     <OptionsContainer />
                     <Keyboard />

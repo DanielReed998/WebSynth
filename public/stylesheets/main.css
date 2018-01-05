@@ -1,6 +1,14 @@
+body {
+    background-color: rgb(230, 230, 230)
+}
+
 button {
     border-radius: 5px;
     font-size: 20px;
+}
+
+.title {
+    color: rgb(235, 233, 233);
 }
 
 #main {
@@ -9,14 +17,40 @@ button {
     justify-content: center;
 }
 
+.white {
+    color: white;
+}
+
 #functionality {
     width: 100%;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1,
+h4 {
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(71, 71, 71, 0.562);
+    display: inline-block
 }
 
 #options-container {
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 30%;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: rgba(71, 71, 71, 0.562);
+    color: white;
+}
+
+#options-container select {
+    color: black;
 }
 
 #wave-img {
@@ -49,7 +83,8 @@ button {
     display: flex;
     position: relative;
     height: 16rem;
-    margin: 20px;
+    width: 32rem;
+    margin: 20px auto;
 }
 
 .hidden {
@@ -101,7 +136,7 @@ button {
 }
 
 .orange {
-    background-color: darkorange;
+    background-color: rgb(139, 51, 66);
 }
 
 .blue {
@@ -109,15 +144,15 @@ button {
 }
 
 .grey {
-    background-color: green;
+    background-color: rgb(1, 100, 1);
 }
 
 .table-container {
     display: flex;
+    margin-top: 10px;
 }
 
 #machine-table {
-    margin: 20px;
     border: 1px solid #ddd;
     width: 400px;
     height: 400px;
@@ -125,7 +160,6 @@ button {
 }
 
 #options-table {
-    margin: 20px;
     border: 1px solid #ddd;
     width: 400px;
     height: 100px;
@@ -156,8 +190,8 @@ td {
 .table-labels {
     background-color: rgba(201, 200, 200, 0.562);
     border-radius: 5px;
-    margin: 20px 20px 20px -10px;
     padding-left: 0px;
+    font-size: small;
 }
 
 td {
@@ -166,12 +200,20 @@ td {
 
 li {
     list-style: none;
-    margin: 8px 0;
-    border: 1px solid black;
+    margin: 10px;
+    border: 1px solid rgb(109, 107, 107);
+}
+
+.button-container {
+    display: inline-block;
 }
 
 #sequencer-btns {
     margin-bottom: 20px;
+}
+
+.sequence-table {
+    margin-left: 30px;
 }
 
 .option-slider {
@@ -180,5 +222,32 @@ li {
 
 #option-sliders {
     display: flex;
-    background-color: rgba(201, 200, 200, 0.562);
+    border-radius: 3px;
+    background-color: rgba(71, 71, 71, 0.562);
+    width: 75%;
+    margin: auto;
+}
+
+#option-sliders div {
+    padding: 0 3rem;
+    color: white;
+    background-color: rgba(71, 71, 71, 0.562);
+    border-radius: 3px;
+    width: 20%
+}
+
+#option-sliders label {
+    margin: 10px auto
+}
+
+#option-sliders div select {
+    color: black;
+}
+
+#sequencer-main {
+    text-align: center;
+}
+
+#machine {
+    display: inline-block;
 }

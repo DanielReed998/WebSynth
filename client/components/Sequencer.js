@@ -31,8 +31,9 @@ class Sequencer extends Component {
             this.interval = setInterval(()=> {
 
                 //each beat, determine the options for the notes
+                let accent = parseInt(document.getElementById('accent-slider').value);
                 let accentBox = document.getElementById(`${this.beat}-accent`);
-                let volume = accentBox.classList.contains('active-option') ? 150 : 75;
+                let volume = accentBox.classList.contains('active-option') ? 100+accent : 100-accent;
 
                 let octaveSwitch = 0;
                 let upOctaveBox = document.getElementById(`${this.beat}-octaveUp`);
@@ -68,14 +69,13 @@ class Sequencer extends Component {
                             const frequency = codes[code].frequency * Math.pow(2, octaveSwitch);
                             const distortion = document.getElementById('distortion-slider').value;
                             const sustain = document.getElementById('sustain-slider').value;
-                            const accent = document.getElementById('accent-slider').value;
                             const waveform = document.getElementById('sequence-waveform').value;
                             
                             const playNote = new Note(frequency, 
                                                     this.audioContext, 
                                                     waveform, 
                                                     volume, 
-                                                    distortion.value, 
+                                                    distortion, 
                                                     sustain);
                             this.activeNotes[code] = playNote;
                             playNote.start();
@@ -184,8 +184,8 @@ class Sequencer extends Component {
             const sequenceData = this.props.sequence.data;
             const sequenceOptions = this.props.sequence.options;
             return (
-                <div>
-                    <h4>Sequencer</h4>
+                <div id="sequencer-main">
+                    <h4 className="title">Sequencer</h4>
                     <div id="option-sliders">
                         <div>
                             <label>tempo: </label>
@@ -194,15 +194,15 @@ class Sequencer extends Component {
                         </div>
                         <div>
                             <label>distortion: </label>
-                            <input id="distortion-slider" orient="vertical" type="range" className="slider option-slider" min="40" max="300" defaultValue="120"/>
+                            <input id="distortion-slider" orient="vertical" type="range" className="slider option-slider" min="0" max="100" defaultValue="0"/>
                         </div>
                         <div>
                             <label>sustain: </label>
-                            <input id="sustain-slider" orient="vertical" type="range" className="slider option-slider" min="40" max="300" defaultValue="120"/>                            
+                            <input id="sustain-slider" orient="vertical" type="range" className="slider option-slider" min="50" max="3000" defaultValue="200"/>                            
                         </div>
                         <div>
                             <label>accent: </label>
-                            <input id="distortion-slider" orient="vertical" type="range" className="slider option-slider" min="40" max="300" defaultValue="120"/>                            
+                            <input id="accent-slider" orient="vertical" type="range" className="slider option-slider" min="10" max="100" defaultValue="40"/>                            
                         </div>
                         <div>
                             <label>waveform: </label>
@@ -214,9 +214,9 @@ class Sequencer extends Component {
                             </select>
                         </div>
                     </div>
-                    <div>
+                    <div id="machine">
                         <div className="table-container">
-                            <table id={'machine-table'}>
+                            <table id={'machine-table'} className="sequence-table">
                                 <tbody>
                                     {Object.keys(sequenceData).reverse().map(note => {
                                         return (
@@ -252,7 +252,7 @@ class Sequencer extends Component {
                             </ul>  
                         </div>
                         <div className="table-container">
-                            <table id={'options-table'}>
+                            <table id={'options-table'} className="sequence-table">
                                 <tbody>
                                     {Object.keys(sequenceOptions).map(option => {
                                         return (
@@ -287,15 +287,17 @@ class Sequencer extends Component {
                                 })}
                             </ul>  
                         </div>
-                        <button 
-                            onClick={() => {
-                                this.beat = 0;
-                                this.startInterval()
-                            }} 
-                            className="btn btn-primary">Start</button>
-                        <button onClick={this.stopInterval} className="btn btn-danger">Stop</button>
-                        <button onClick={this.save} className="btn btn-warning">Save</button>  
-                        <button onClick={this.clear} className="btn btn-info">Clear</button>
+                        <div className="button-container center">
+                            <button 
+                                onClick={() => {
+                                    this.beat = 0;
+                                    this.startInterval()
+                                }} 
+                                className="btn btn-primary">Start</button>
+                            <button onClick={this.stopInterval} className="btn btn-danger">Stop</button>
+                            <button onClick={this.save} className="btn btn-warning">Save</button>  
+                            <button onClick={this.clear} className="btn btn-info">Clear</button>
+                        </div>
                     </div>                  
                 </div>
             )
