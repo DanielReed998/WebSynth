@@ -251,3 +251,7 @@ li {
 #machine {
     display: inline-block;
 }
+
+#login-btn {
+    width: 15%;
+}

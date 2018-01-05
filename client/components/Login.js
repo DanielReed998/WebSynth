@@ -15,12 +15,12 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <h1>Synthomatic</h1>
+                <h1>Welcome</h1>
                 <form onSubmit={this.onLoginSubmit}>
                     <h2>Login!</h2>
                     <input placeholder="email" name="email"/>
                     <input placeholder="password" name="password"/>
-                    <button type="submit" className="btn btn-block btn-primary">Login</button>
+                    <button type="submit" className="btn btn-block btn-primary" id="login-btn">Login</button>
                 </form>
                 <h4>If you are new, sign up <NavLink to="/signup">here!</NavLink></h4>
             </div>

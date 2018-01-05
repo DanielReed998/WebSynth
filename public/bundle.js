@@ -28423,7 +28423,7 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'h1',
                 null,
-                'Synthomatic'
+                'Welcome'
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'form',
@@ -28437,7 +28437,7 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { placeholder: 'password', name: 'password' }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'button',
-                    { type: 'submit', className: 'btn btn-block btn-primary' },
+                    { type: 'submit', className: 'btn btn-block btn-primary', id: 'login-btn' },
                     'Login'
                 )
             ),
