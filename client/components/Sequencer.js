@@ -320,8 +320,7 @@ const mapDispatchToProps = () => dispatch => {
             dispatch(saveSequence(updatedSequence))
         },
         clear: () => {
-            let es = emptySequence();
-            dispatch(getSequence(es));
+            dispatch(getSequence(emptySequence));
         }
     };
 };

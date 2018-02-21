@@ -6,8 +6,7 @@ function createEmptyBeats(n) {
     return obj;
 }
 
-export default (startNote) => {
-    return {
+export const emptySequenceData = {
         g: createEmptyBeats(16),
         gSharp: createEmptyBeats(16),
         a: createEmptyBeats(16),
@@ -21,11 +20,21 @@ export default (startNote) => {
         f: createEmptyBeats(16),
         fSharp: createEmptyBeats(16),
         G: createEmptyBeats(16),
-    }
 }
 
-export const emptyOptionsSequence = {
+export const emptySequenceOptions = {
     accent: createEmptyBeats(16),
     octaveUp: createEmptyBeats(16),
     octaveDown: createEmptyBeats(16)
+}
+
+export default {
+    accent: 30,
+    data: emptySequenceData,
+    id: 1,
+    name: 'empty sequence table',
+    options: emptySequenceOptions,
+    sustain: 100,
+    tempo: 100,
+    userId: 1
 }

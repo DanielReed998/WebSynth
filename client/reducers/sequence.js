@@ -1,5 +1,5 @@
-import emptySequence from '../lib/empty-sequence';
 import axios from 'axios';
+import { emptySequenceData, emptySequenceOptions } from '../lib/empty-sequence';
 
 /* ACTION TYPES */
 
@@ -57,6 +57,20 @@ export const saveSequence = (sequence) => {
         .catch(err => console.error(err));
     }
 }
+
+// export const resetSequence = () => {
+//     return (dispatch) => {
+//         axios.put('/api/sequences/1', {
+//             data: emptySequenceData,
+//             options: emptySequenceOptions
+//         })
+//         .then(res => res.data)
+//         .then(clearSequence => {
+//             dispatch(getSequence(clearSequence))
+//         })
+//         .catch(err => console.error(err));
+//     }
+// }
 
 // export const postSequence = (sequence) => {
 //     return (dispatch) => {

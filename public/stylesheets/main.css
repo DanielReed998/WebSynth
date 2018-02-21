@@ -166,10 +166,6 @@ h4 {
     background-color: rgb(39, 39, 39);
 }
 
-td {
-    border: 1px solid lightgray;
-}
-
 .fourth {
     background-color: rgb(240, 238, 238);
 }
@@ -195,7 +191,9 @@ td {
 }
 
 td {
+    border: 1px solid lightgray;
     width: 5%;
+    transition: background-color 0.2s ease;
 }
 
 li {

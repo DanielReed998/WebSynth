@@ -7,7 +7,7 @@ import Functionality from './components/Functionality';
 import Login from './components/Login';
 import Signup from './components/Signup';
 
-import emptySequence, { emptyOptionsSequence } from './lib/empty-sequence';
+import emptySequence from './lib/empty-sequence';
 
 import { fetchSavedSequence } from './reducers/sequence';
 

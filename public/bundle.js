@@ -2283,9 +2283,9 @@ module.exports = defaults;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_empty_sequence__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_empty_sequence__ = __webpack_require__(32);
 
 
 
@@ -2331,7 +2331,7 @@ const getSequence = sequence => {
 
 const fetchSavedSequence = id => {
     return dispatch => {
-        __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get('/api/sequences/1').then(res => res.data).then(sequence => {
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/sequences/1').then(res => res.data).then(sequence => {
             dispatch(getSequence(sequence));
         }).catch(err => console.error(err));
     };
@@ -2341,13 +2341,27 @@ const fetchSavedSequence = id => {
 
 const saveSequence = sequence => {
     return dispatch => {
-        __WEBPACK_IMPORTED_MODULE_1_axios___default.a.put('/api/sequences/1', sequence).then(res => res.data).then(newSequence => {
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/sequences/1', sequence).then(res => res.data).then(newSequence => {
             dispatch(getSequence(newSequence));
         }).catch(err => console.error(err));
     };
 };
 /* harmony export (immutable) */ __webpack_exports__["d"] = saveSequence;
 
+
+// export const resetSequence = () => {
+//     return (dispatch) => {
+//         axios.put('/api/sequences/1', {
+//             data: emptySequenceData,
+//             options: emptySequenceOptions
+//         })
+//         .then(res => res.data)
+//         .then(clearSequence => {
+//             dispatch(getSequence(clearSequence))
+//         })
+//         .catch(err => console.error(err));
+//     }
+// }
 
 // export const postSequence = (sequence) => {
 //     return (dispatch) => {
@@ -2391,31 +2405,42 @@ function createEmptyBeats(n) {
     return obj;
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (startNote => {
-    return {
-        g: createEmptyBeats(16),
-        gSharp: createEmptyBeats(16),
-        a: createEmptyBeats(16),
-        aSharp: createEmptyBeats(16),
-        b: createEmptyBeats(16),
-        c: createEmptyBeats(16),
-        cSharp: createEmptyBeats(16),
-        d: createEmptyBeats(16),
-        dSharp: createEmptyBeats(16),
-        e: createEmptyBeats(16),
-        f: createEmptyBeats(16),
-        fSharp: createEmptyBeats(16),
-        G: createEmptyBeats(16)
-    };
-});
+const emptySequenceData = {
+    g: createEmptyBeats(16),
+    gSharp: createEmptyBeats(16),
+    a: createEmptyBeats(16),
+    aSharp: createEmptyBeats(16),
+    b: createEmptyBeats(16),
+    c: createEmptyBeats(16),
+    cSharp: createEmptyBeats(16),
+    d: createEmptyBeats(16),
+    dSharp: createEmptyBeats(16),
+    e: createEmptyBeats(16),
+    f: createEmptyBeats(16),
+    fSharp: createEmptyBeats(16),
+    G: createEmptyBeats(16)
+};
+/* unused harmony export emptySequenceData */
 
-const emptyOptionsSequence = {
+
+const emptySequenceOptions = {
     accent: createEmptyBeats(16),
     octaveUp: createEmptyBeats(16),
     octaveDown: createEmptyBeats(16)
 };
-/* unused harmony export emptyOptionsSequence */
+/* unused harmony export emptySequenceOptions */
 
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    accent: 30,
+    data: emptySequenceData,
+    id: 1,
+    name: 'empty sequence table',
+    options: emptySequenceOptions,
+    sustain: 100,
+    tempo: 100,
+    userId: 1
+});
 
 /***/ }),
 /* 33 */
@@ -28330,8 +28355,7 @@ const mapDispatchToProps = () => dispatch => {
             dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers_sequence__["d" /* saveSequence */])(updatedSequence));
         },
         clear: () => {
-            let es = Object(__WEBPACK_IMPORTED_MODULE_6__lib_empty_sequence__["a" /* default */])();
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers_sequence__["c" /* getSequence */])(es));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers_sequence__["c" /* getSequence */])(__WEBPACK_IMPORTED_MODULE_6__lib_empty_sequence__["a" /* default */]));
         }
     };
 };
