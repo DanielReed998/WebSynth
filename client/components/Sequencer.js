@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import { updateSequence, updateOption, saveSequence, getSequence } from '../reducers/sequence';
+import { updateSequence, updateOption, getSequence } from '../reducers/sequence';
 import Note from '../lib/Note';
 import { codes, noteNames } from '../lib/keys';
 import emptySequence from '../lib/empty-sequence';
@@ -20,7 +20,7 @@ class Sequencer extends Component {
         this.stopInterval = this.stopInterval.bind(this);
         this.handleTempoChange = this.handleTempoChange.bind(this);
         this.checkChord = this.checkChord.bind(this);
-        this.save = this.save.bind(this);
+        // this.save = this.save.bind(this);
         this.clear = this.clear.bind(this);        
     }
 
@@ -66,12 +66,15 @@ class Sequencer extends Component {
                     //play any notes that are active
                     if (noteBox.classList.contains('active-note')){
                         if (!this.activeNotes[code]) {
+                            const id = codes[code].id;
                             const frequency = codes[code].frequency * Math.pow(2, octaveSwitch);
                             const distortion = document.getElementById('distortion-slider').value;
                             const sustain = document.getElementById('sustain-slider').value;
                             const waveform = document.getElementById('sequence-waveform').value;
                             
-                            const playNote = new Note(frequency, 
+                            const playNote = new Note(
+                                                    id,
+                                                    frequency, 
                                                     this.audioContext, 
                                                     waveform, 
                                                     volume, 
@@ -171,9 +174,9 @@ class Sequencer extends Component {
         }
     }
 
-    save() {
-        this.props.save(this.props.sequence);
-    }
+    // save() {
+    //     this.props.save(this.props.sequence);
+    // }
 
     clear() {
         this.props.clear();
@@ -189,8 +192,8 @@ class Sequencer extends Component {
                     <div id="option-sliders">
                         <div>
                             <label>tempo: </label>
-                            <label id="tempo-label">{'100 bpm'}</label>
                             <input id="tempo-slider" orient="vertical" onChange={this.handleTempoChange} type="range" className="slider option-slider" min="40" max="300" defaultValue="120"/>
+                            <label id="tempo-label">{'100 bpm'}</label>
                         </div>
                         <div>
                             <label>distortion: </label>
@@ -295,7 +298,7 @@ class Sequencer extends Component {
                                 }} 
                                 className="btn btn-primary">Start</button>
                             <button onClick={this.stopInterval} className="btn btn-danger">Stop</button>
-                            <button onClick={this.save} className="btn btn-warning">Save</button>  
+                            {/*<button onClick={this.save} className="btn btn-warning">Save</button>*/}  
                             <button onClick={this.clear} className="btn btn-info">Clear</button>
                         </div>
                     </div>                  

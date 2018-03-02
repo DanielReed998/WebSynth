@@ -31,10 +31,8 @@ export const emptySequenceOptions = {
 export default {
     accent: 30,
     data: emptySequenceData,
-    id: 1,
     name: 'empty sequence table',
     options: emptySequenceOptions,
     sustain: 100,
     tempo: 100,
-    userId: 1
 }

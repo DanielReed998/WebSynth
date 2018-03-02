@@ -1,6 +1,7 @@
 export default class Note {
 
-    constructor(frequency, audioContext, waveform, volume, distortion, sustain){
+    constructor(id, frequency, audioContext, waveform, volume, distortion, sustain){
+        this.id = id;
         this.frequency = frequency;
         this.audioContext = audioContext;
         this.waveform = waveform;
@@ -20,18 +21,19 @@ export default class Note {
         this.gainNode.gain.value = this.volume;
         this.dist.curve = makeDistortionCurve(parseInt(this.distortionCurve));
 
-        if (this.waveform === 'custom') {
+        /* Custom waveform will be implemented in v2 */
 
-            var real = new Float32Array([-1, -0.5, 0, 0.5, 1]);
-            var imag = new Float32Array([1, 0.5, 0, -0.5, -1]);
+        // if (this.waveform === 'custom') {
+        //     var real = new Float32Array([-1, -0.5, 0, 0.5, 1]);
+        //     var imag = new Float32Array([1, 0.5, 0, -0.5, -1]);
      
-            var wave = this.audioContext.createPeriodicWave(real, imag);         
-            this.osc.setPeriodicWave(wave);
-        } else {
-            this.osc.type = this.waveform;   
-        }
+        //     var wave = this.audioContext.createPeriodicWave(real, imag);         
+        //     this.osc.setPeriodicWave(wave);
+        // } else {
+        //     this.osc.type = this.waveform;   
+        // }
 
-        
+        this.osc.type = this.waveform;
         this.osc.connect(this.dist);
         this.dist.connect(this.gainNode);
         this.gainNode.connect(this.audioContext.destination)
@@ -50,7 +52,9 @@ export default class Note {
     }
 };
 
-// http://stackoverflow.com/a/22313408/1090298
+// Distortion only works for sine waveform really, reference for this algorithm:
+//      http://stackoverflow.com/a/22313408/1090298
+
 function makeDistortionCurve( amount ) {
     var k = typeof amount === 'number' ? amount : 0,
       n_samples = 44100,

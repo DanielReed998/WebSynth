@@ -204,6 +204,7 @@ li {
 
 .button-container {
     display: inline-block;
+    margin-bottom: 20px;
 }
 
 #sequencer-btns {

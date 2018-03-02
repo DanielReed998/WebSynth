@@ -4,7 +4,6 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "deploy": "node script/deploy",
         "test": "echo \"Error: no test specified\" && exit 1",
         "start:dev": "webpack -w",
         "start": "nodemon main"

@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { emptySequenceData, emptySequenceOptions } from '../lib/empty-sequence';
+import emptySequence from '../lib/empty-sequence';
+
+const defaultState = emptySequence;
 
 /* ACTION TYPES */
-
 const UPDATE_SEQUENCE = 'UPDATE_SEQUENCE';
 const UPDATE_OPTION = 'UPDATE_OPTION';
 const GET_SEQUENCE = 'GET_SEQUENCE';
@@ -36,27 +37,30 @@ export const getSequence = (sequence) => {
 
 /* DISPATCH */
 
-export const fetchSavedSequence = (id) => {
-    return (dispatch) => {
-        axios.get('/api/sequences/1')
-        .then(res => res.data)
-        .then(sequence => {
-            dispatch(getSequence(sequence))
-        })
-        .catch(err => console.error(err));
-    }
-}
+/*Taking out backend sequence persistence for now. Once I add more features that can be associated
+** with a user, I'll reconnect these. */
 
-export const saveSequence = (sequence) => {
-    return (dispatch) => {
-        axios.put('/api/sequences/1', sequence)
-        .then(res => res.data)
-        .then(newSequence => {
-            dispatch(getSequence(newSequence))
-        })
-        .catch(err => console.error(err));
-    }
-}
+// export const fetchSavedSequence = (id) => {
+//     return (dispatch) => {
+//         axios.get('/api/sequences/1')
+//         .then(res => res.data)
+//         .then(sequence => {
+//             dispatch(getSequence(sequence))
+//         })
+//         .catch(err => console.error(err));
+//     }
+// }
+
+// export const saveSequence = (sequence) => {
+//     return (dispatch) => {
+//         axios.put('/api/sequences/1', sequence)
+//         .then(res => res.data)
+//         .then(newSequence => {
+//             dispatch(getSequence(newSequence))
+//         })
+//         .catch(err => console.error(err));
+//     }
+// }
 
 // export const resetSequence = () => {
 //     return (dispatch) => {
@@ -85,7 +89,7 @@ export const saveSequence = (sequence) => {
 
 /* REDUCER */
 
-export default (prevSequence = {}, action) => {
+export default (prevSequence = defaultState, action) => {
     switch (action.type) {
         case UPDATE_SEQUENCE:
             let updatedSequence = Object.assign({}, prevSequence);
@@ -96,7 +100,7 @@ export default (prevSequence = {}, action) => {
             updatedOptions.options[action.option][action.beat] = !updatedOptions.options[action.option][action.beat];
             return updatedOptions;
         case GET_SEQUENCE:
-            return Object.assign({}, action.sequence);
+            return Object.assign({}, prevSequence, action.sequence);
         default:
             return prevSequence;
     }

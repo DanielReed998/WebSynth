@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
-import Navbar from './Navbar';
-import Footer from './Footer';
 import Keyboard from './Keyboard';
 import OptionsContainer from './OptionsContainer';
 import Sequencer from './Sequencer';
@@ -26,13 +24,14 @@ class Functionality extends Component {
         let code = e.keyCode ? e.keyCode : e.which;
         
         if (!this.activeNotes[code] && codes[code]) {
+            let id = codes[code].id;
             let octave = document.getElementById('octave').value;
             let frequency = codes[code].frequency * Math.pow(2, octave);
             let waveform = document.getElementById('waveform').value;
             let volume = document.getElementById('volume').value;
             let distortion = document.getElementById('distortion').value;
             let sustain = document.getElementById('sustain').value;
-            let note = new Note(frequency, this.audioContext, waveform, volume, distortion, sustain);
+            let note = new Note(id, frequency, this.audioContext, waveform, volume, distortion, sustain);
             this.activeNotes[code] = note;
             document.getElementById(codes[code].name).classList.add('active');
             note.start();
@@ -52,27 +51,27 @@ class Functionality extends Component {
     
     checkChord() {
         var count = 0;
-        var noteFrequencies = [];
+        var noteIds = [];
         Object.keys(this.activeNotes).forEach(key => {
             if (this.activeNotes[key]) {
                 count++;
-                noteFrequencies.push(this.activeNotes[key].frequency);
+                noteIds.push(this.activeNotes[key].frequency);
             }
         })
         if (count === 3) {
-            noteFrequencies.sort();
-            let freq1 = noteFrequencies[0];
-            let freq2 = noteFrequencies[1];
-            let freq3 = noteFrequencies[2];        
-            changeBackground(freq1, freq2, freq3);
+            noteIds.sort();
+            let id1 = noteIds[0];
+            let id2 = noteIds[1];
+            let id3 = noteIds[2];        
+            changeBackground(id1, id2, id3);
         }
     
-        function changeBackground(freq1, freq2, freq3) {
+        function changeBackground(id1, id2, id3) {
             var body = document.getElementById('body');
-            if (major(freq1, freq2, freq3)) {
+            if (major(id1, id2, id3)) {
                 body.classList = 'container';
                 body.classList.add('orange');
-            } else if (minor(freq1, freq2, freq3)) {
+            } else if (minor(id1, id2, id3)) {
                 body.classList = 'container';
                 body.classList.add('blue');
             } else {
@@ -81,29 +80,26 @@ class Functionality extends Component {
             }
         }
     
-        function major(freq1, freq2, freq3) {
-            return (Math.abs((freq2 / 5) - (freq1 / 4)) < 1
-                 && Math.abs((freq3 / 6) - (freq1 / 4)) < 1)
-                || (Math.abs((freq2 / 6) - (freq1 / 5)) < 1
-                 && Math.abs((freq3 / 8) - (freq1 / 5)) < 1)
-                || (Math.abs((freq2 / 4) - (freq1 / 3)) < 1
-                 && Math.abs((freq3 / 5) - (freq1 / 3)) < 1)
+        function major(id1, id2, id3) {
+            const firstDiff = id2-id1;
+            const secondDiff = id3-id2;
+            return firstDiff === 4 && secondDiff === 3 ||
+                   firstDiff === 3 && secondDiff === 5 ||
+                   firstDiff === 5 && secondDiff === 4;
         }
         
-        function minor(freq1, freq2, freq3) {
-            return (Math.abs((freq2 / 12) - (freq1 / 10)) < 1
-                 && Math.abs((freq3 / 15) - (freq1 / 10)) < 1)
-                || (Math.abs((freq2 / 15) - (freq1 / 12)) < 1
-                 && Math.abs((freq3 / 20) - (freq1 / 12)) < 1)
-                || (Math.abs((freq2 / 20) - (freq1 / 15)) < 1
-                 && Math.abs((freq3 / 24) - (freq1 / 15)) < 1)
+        function minor(id1, id2, id3) {
+            const firstDiff = id2-id1;
+            const secondDiff = id3-id2;
+            return firstDiff === 3 && secondDiff === 4 ||
+                   firstDiff === 4 && secondDiff === 5 ||
+                   firstDiff === 5 && secondDiff === 3;
         }
     }
 
     render() {
         return (
-            <div id="main" className="container-fluid" onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabIndex="0">
-                <Navbar />
+            <div id="main" className="container-fluid" autoFocus={true} onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabIndex="0">
                 <div className="center title">
                     <h1 className="center">Synth</h1>
                 </div>
@@ -112,7 +108,6 @@ class Functionality extends Component {
                     <Keyboard />
                     <Sequencer />
                 </div>
-                <Footer />
             </div>
         )
     }
@@ -120,6 +115,4 @@ class Functionality extends Component {
 
 const mapStateToProps = ({sequence}) => ({sequence});
 
-const mapDispatchToProps = null;
-
-export default connect(mapStateToProps, mapDispatchToProps)(Functionality);
+export default connect(mapStateToProps)(Functionality);

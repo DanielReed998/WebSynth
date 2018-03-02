@@ -7,12 +7,12 @@ import Functionality from './components/Functionality';
 import Login from './components/Login';
 import Signup from './components/Signup';
 
-import emptySequence from './lib/empty-sequence';
+import { getSequence } from './reducers/sequence';
 
-import { fetchSavedSequence } from './reducers/sequence';
+import { emptySequenceData, emptySequenceOptions } from './lib/empty-sequence';
 
 // class Main extends Component { 
-function Main({getFirstSavedSequence}) {
+export default function Main() {
     // componentDidMount() {
     //     axios.post('/api/users', {
     //         name: 'Regal',
@@ -35,10 +35,10 @@ function Main({getFirstSavedSequence}) {
     return (
             <main>
                 <Switch>
-                    <Route exact path="/signup" component={Signup} />
+                    {/*<Route exact path="/signup" component={Signup} />
                     <Route exact path="/" component={Login} />
-                    {/*onEnter={getFirstSavedSequence()}*/}
-                    <Route exact path="/functionality" component={Functionality} onEnter={getFirstSavedSequence()} /> 
+                    onEnter={getFirstSavedSequence()}*/}
+                    <Route exact path="/" component={Functionality} /> 
                     <Redirect to="/" />
                 </Switch>
             </main> 
@@ -46,16 +46,20 @@ function Main({getFirstSavedSequence}) {
 // }
 }
 
-const mapStateToProps = () => {
-    return {};
-}
+// const mapStateToProps = () => {
+//     return {};
+// }
 
-const mapDispatchToProps = () => dispatch => {
-    return {
-        getFirstSavedSequence: () => {
-            dispatch(fetchSavedSequence(1));
-        }
-    };
-}
+// const mapDispatchToProps = () => dispatch => {
+//     return {
+//         setEmptySequence: () => {
+//             const emptySequence = {
+//                 data: emptySequenceData,
+//                 options: emptySequenceOptions
+//             }
+//             dispatch(getSequence(emptySequence));
+//         }
+//     };
+// }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
