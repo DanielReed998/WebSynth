@@ -26738,7 +26738,7 @@ function Main() {
     // render() {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'main',
-        null,
+        { autoFocus: true },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Switch */],
             null,
@@ -27664,6 +27664,8 @@ module.exports = function spread(callback) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Sequencer__ = __webpack_require__(149);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_keys__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_Note__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__reducers__ = __webpack_require__(157);
+
 
 
 
@@ -27681,39 +27683,72 @@ class Functionality extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         this.audioContext = new AudioContext();
         this.activeNotes = {};
 
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handleKeyUp = this.handleKeyUp.bind(this);
         this.checkChord = this.checkChord.bind(this);
     }
 
-    handleKeyDown(e) {
-        let code = e.keyCode ? e.keyCode : e.which;
+    componentDidMount() {
+        document.addEventListener('keydown', e => {
+            const code = e.keyCode ? e.keyCode : e.which;
+            const activeNotes = this.props.activeNotes;
 
-        if (!this.activeNotes[code] && __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code]) {
-            let id = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].id;
-            let octave = document.getElementById('octave').value;
-            let frequency = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].frequency * Math.pow(2, octave);
-            let waveform = document.getElementById('waveform').value;
-            let volume = document.getElementById('volume').value;
-            let distortion = document.getElementById('distortion').value;
-            let sustain = document.getElementById('sustain').value;
-            let note = new __WEBPACK_IMPORTED_MODULE_6__lib_Note__["a" /* default */](id, frequency, this.audioContext, waveform, volume, distortion, sustain);
-            this.activeNotes[code] = note;
-            document.getElementById(__WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].name).classList.add('active');
-            note.start();
-        }
+            if (!activeNotes[code] && __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code]) {
+                let id = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].id;
+                let octave = document.getElementById('octave').value;
+                let frequency = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].frequency * Math.pow(2, octave);
+                let waveform = document.getElementById('waveform').value;
+                let volume = document.getElementById('volume').value;
+                let distortion = document.getElementById('distortion').value;
+                let sustain = document.getElementById('sustain').value;
+                let note = new __WEBPACK_IMPORTED_MODULE_6__lib_Note__["a" /* default */](id, frequency, this.audioContext, waveform, volume, distortion, sustain);
+                this.props.dispatchAddNote(code, note);
+                document.getElementById(__WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].name).classList.add('active');
+                note.start();
+            }
 
-        this.checkChord();
+            this.checkChord();
+        });
+
+        document.addEventListener('keyup', e => {
+            console.log('stopped pressing something?');
+            const code = e.keyCode ? e.keyCode : e.which;
+            const activeNotes = this.props.activeNotes;
+
+            if (activeNotes[code]) {
+                this.props.disptachRemoveNote(code);
+                document.getElementById(__WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].name).classList.remove('active');
+            }
+        });
     }
 
-    handleKeyUp(e) {
-        let code = e.keyCode ? e.keyCode : e.which;
-        if (this.activeNotes[code]) {
-            this.activeNotes[code].stop();
-            this.activeNotes[code] = null;
-            document.getElementById(__WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].name).classList.remove('active');
-        }
-    }
+    // handleKeyDown(e) {
+    //     const code = e.keyCode ? e.keyCode : e.which;
+    //     const activeNotes = this.props.activeNotes;
+
+    //     if (!activeNotes[code] && codes[code]) {
+    //         let id = codes[code].id;
+    //         let octave = document.getElementById('octave').value;
+    //         let frequency = codes[code].frequency * Math.pow(2, octave);
+    //         let waveform = document.getElementById('waveform').value;
+    //         let volume = document.getElementById('volume').value;
+    //         let distortion = document.getElementById('distortion').value;
+    //         let sustain = document.getElementById('sustain').value;
+    //         let note = new Note(id, frequency, this.audioContext, waveform, volume, distortion, sustain);
+    //         this.activeNotes[code] = note;
+    //         document.getElementById(codes[code].name).classList.add('active');
+    //         note.start();
+    //     }
+
+    //     this.checkChord();    
+    // }
+
+    // handleKeyUp(e) {
+    //     let code = e.keyCode ? e.keyCode : e.which;
+    //     if (this.activeNotes[code]) {
+    //         this.activeNotes[code].stop();
+    //         this.activeNotes[code] = null;
+    //         document.getElementById(codes[code].name).classList.remove('active');
+    //     }
+    // }
 
     checkChord() {
         var count = 0;
@@ -27747,12 +27782,20 @@ class Functionality extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         }
 
         function major(id1, id2, id3) {
+            console.log("id1: ", id1);
+            console.log("id2: ", id2);
+            console.log("id3: ", id3);
+
             const firstDiff = id2 - id1;
             const secondDiff = id3 - id2;
             return firstDiff === 4 && secondDiff === 3 || firstDiff === 3 && secondDiff === 5 || firstDiff === 5 && secondDiff === 4;
         }
 
         function minor(id1, id2, id3) {
+            console.log("id1: ", id1);
+            console.log("id2: ", id2);
+            console.log("id3: ", id3);
+
             const firstDiff = id2 - id1;
             const secondDiff = id3 - id2;
             return firstDiff === 3 && secondDiff === 4 || firstDiff === 4 && secondDiff === 5 || firstDiff === 5 && secondDiff === 3;
@@ -27769,7 +27812,7 @@ class Functionality extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'h1',
                     { className: 'center' },
-                    'Synth'
+                    'WebSynth v1.0'
                 )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -27783,9 +27826,20 @@ class Functionality extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     }
 }
 
-const mapStateToProps = ({ sequence }) => ({ sequence });
+const mapStateToProps = ({ sequence, activeNotes }) => ({ sequence, activeNotes });
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps)(Functionality));
+const mapDispatchToProps = () => dispatch => {
+    return {
+        dispatchAddNote: (code, note) => {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__reducers__["a" /* addNote */])(code, note));
+        },
+        disptachRemoveNote: code => {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__reducers__["c" /* removeNote */])(code));
+        }
+    };
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(Functionality));
 
 /***/ }),
 /* 147 */
@@ -27804,33 +27858,13 @@ function Keyboard() {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "div",
             { id: "sharps" },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "button",
-                { id: "g-sharp", className: "sharp-note" },
-                "g#"
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "button",
-                { id: "a-sharp", className: "sharp-note" },
-                "a#"
-            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("button", { id: "g-sharp", className: "sharp-note" }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("button", { id: "a-sharp", className: "sharp-note" }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("button", { id: "b-sharp", className: "fake-sharp-note" }),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "button",
-                { id: "c-sharp", className: "sharp-note" },
-                "c#"
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "button",
-                { id: "d-sharp", className: "sharp-note" },
-                "d#"
-            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("button", { id: "c-sharp", className: "sharp-note" }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("button", { id: "d-sharp", className: "sharp-note" }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("button", { id: "e-sharp", className: "fake-sharp-note" }),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "button",
-                { id: "f-sharp", className: "sharp-note" },
-                "f#"
-            )
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("button", { id: "f-sharp", className: "sharp-note" })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "div",
@@ -27877,7 +27911,11 @@ class OptionsContainer extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] 
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
             { id: 'options-container', className: 'center' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { id: 'wave-img', className: 'sine' }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { id: 'wave-img', className: 'sine' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: '/images/sine.jpg', visibility: 'hidden' })
+            ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'select',
                 { id: 'waveform', onChange: this.handleChange },
@@ -28669,7 +28707,7 @@ const mapDispatch = dispatch => {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["createStore"])(__WEBPACK_IMPORTED_MODULE_4__reducers__["a" /* default */], Object(__WEBPACK_IMPORTED_MODULE_3_redux_devtools_extension__["composeWithDevTools"])(Object(__WEBPACK_IMPORTED_MODULE_0_redux__["applyMiddleware"])(__WEBPACK_IMPORTED_MODULE_1_redux_thunk___default.a, __WEBPACK_IMPORTED_MODULE_2_redux_logger___default.a))));
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["createStore"])(__WEBPACK_IMPORTED_MODULE_4__reducers__["b" /* default */], Object(__WEBPACK_IMPORTED_MODULE_3_redux_devtools_extension__["composeWithDevTools"])(Object(__WEBPACK_IMPORTED_MODULE_0_redux__["applyMiddleware"])(__WEBPACK_IMPORTED_MODULE_1_redux_thunk___default.a, __WEBPACK_IMPORTED_MODULE_2_redux_logger___default.a))));
 
 /***/ }),
 /* 154 */
@@ -28742,15 +28780,86 @@ exports.devToolsEnhancer = (
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sequence__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__currentUser__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__users__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__activeNotes__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__currentUser__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__users__ = __webpack_require__(69);
+/* unused harmony namespace reexport */
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__activeNotes__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__activeNotes__["c"]; });
+/* unused harmony namespace reexport */
+/* unused harmony namespace reexport */
 
 
 
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["combineReducers"])({ sequence: __WEBPACK_IMPORTED_MODULE_1__sequence__["a" /* default */], currentUser: __WEBPACK_IMPORTED_MODULE_2__currentUser__["a" /* default */], users: __WEBPACK_IMPORTED_MODULE_3__users__["b" /* default */] }));
+
+/* harmony default export */ __webpack_exports__["b"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["combineReducers"])({ sequence: __WEBPACK_IMPORTED_MODULE_1__sequence__["a" /* default */], activeNotes: __WEBPACK_IMPORTED_MODULE_2__activeNotes__["b" /* default */], currentUser: __WEBPACK_IMPORTED_MODULE_3__currentUser__["a" /* default */], users: __WEBPACK_IMPORTED_MODULE_4__users__["b" /* default */] }));
+
+
+
+
+
+
+/***/ }),
+/* 158 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const defaultState = {
+    '65': null,
+    '87': null,
+    '83': null,
+    '69': null,
+    '68': null,
+    '70': null,
+    '84': null,
+    '71': null,
+    '89': null,
+    '72': null,
+    '74': null,
+    '73': null,
+    '75': null
+};
+
+/* ACTION TYPES */
+const ADD_NOTE = 'ADD_NOTE';
+const REMOVE_NOTE = 'REMOVE_NOTE';
+
+/* ACTION CREATORS */
+const addNote = (code, note) => {
+    return {
+        type: ADD_NOTE,
+        code,
+        note
+    };
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = addNote;
+
+
+const removeNote = code => {
+    return {
+        type: REMOVE_NOTE,
+        code
+    };
+};
+/* harmony export (immutable) */ __webpack_exports__["c"] = removeNote;
+
+
+/* REDUCER */
+
+/* harmony default export */ __webpack_exports__["b"] = ((prevState = defaultState, action) => {
+    switch (action.type) {
+        case ADD_NOTE:
+            return Object.assign({}, prevState, { [action.code]: action.note });
+        case REMOVE_NOTE:
+            prevState[action.code].stop();
+            return Object.assign({}, prevState, { [action.code]: null });
+        default:
+            return prevState;
+    }
+});
 
 /***/ })
 /******/ ]);

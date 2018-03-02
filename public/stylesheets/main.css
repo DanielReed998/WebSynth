@@ -2,6 +2,10 @@ body {
     background-color: rgb(230, 230, 230)
 }
 
+img {
+    width: 100%;
+}
+
 button {
     border-radius: 5px;
     font-size: 20px;
@@ -17,7 +21,11 @@ button {
     justify-content: center;
 }
 
-.white {
+#main:focus {
+    outline: none;
+}
+
+*/ .white {
     color: white;
 }
 
@@ -42,7 +50,7 @@ h4 {
 #options-container {
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 20rem;
     padding: 10px;
     border-radius: 3px;
     background-color: rgba(71, 71, 71, 0.562);
@@ -55,7 +63,7 @@ h4 {
 
 #wave-img {
     flex: 0 2 75%;
-    height: 115px;
+    width: 100%;
     background-size: contain;
 }
 
@@ -133,6 +141,7 @@ h4 {
 #body {
     height: 100vh;
     transition: background-color 0.5s ease-in-out;
+    width: 100%;
 }
 
 .orange {

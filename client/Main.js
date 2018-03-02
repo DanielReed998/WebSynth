@@ -33,7 +33,7 @@ export default function Main() {
 
     // render() {
     return (
-            <main>
+            <main autoFocus={true}>
                 <Switch>
                     {/*<Route exact path="/signup" component={Signup} />
                     <Route exact path="/" component={Login} />

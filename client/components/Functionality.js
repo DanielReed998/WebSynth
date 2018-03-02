@@ -7,6 +7,7 @@ import Sequencer from './Sequencer';
 
 import { codes } from '../lib/keys';
 import Note from '../lib/Note'; 
+import { addNote, removeNote } from '../reducers';
 
 class Functionality extends Component {
 
@@ -15,39 +16,73 @@ class Functionality extends Component {
         this.audioContext = new AudioContext();
         this.activeNotes = {};
 
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handleKeyUp = this.handleKeyUp.bind(this); 
         this.checkChord = this.checkChord.bind(this);
     }
 
-    handleKeyDown(e) {
-        let code = e.keyCode ? e.keyCode : e.which;
-        
-        if (!this.activeNotes[code] && codes[code]) {
-            let id = codes[code].id;
-            let octave = document.getElementById('octave').value;
-            let frequency = codes[code].frequency * Math.pow(2, octave);
-            let waveform = document.getElementById('waveform').value;
-            let volume = document.getElementById('volume').value;
-            let distortion = document.getElementById('distortion').value;
-            let sustain = document.getElementById('sustain').value;
-            let note = new Note(id, frequency, this.audioContext, waveform, volume, distortion, sustain);
-            this.activeNotes[code] = note;
-            document.getElementById(codes[code].name).classList.add('active');
-            note.start();
-        }
-        
-        this.checkChord();    
+    componentDidMount() {
+        document.addEventListener('keydown', (e) => {
+            const code = e.keyCode ? e.keyCode : e.which;
+            const activeNotes = this.props.activeNotes;
+
+            if (!activeNotes[code] && codes[code]) {
+                let id = codes[code].id;
+                let octave = document.getElementById('octave').value;
+                let frequency = codes[code].frequency * Math.pow(2, octave);
+                let waveform = document.getElementById('waveform').value;
+                let volume = document.getElementById('volume').value;
+                let distortion = document.getElementById('distortion').value;
+                let sustain = document.getElementById('sustain').value;
+                let note = new Note(id, frequency, this.audioContext, waveform, volume, distortion, sustain);
+                this.props.dispatchAddNote(code, note);
+                document.getElementById(codes[code].name).classList.add('active');
+                note.start();
+            }
+            
+            this.checkChord();    
+        });
+
+        document.addEventListener('keyup', (e) => {
+            console.log('stopped pressing something?')
+            const code = e.keyCode ? e.keyCode : e.which;
+            const activeNotes = this.props.activeNotes;
+
+            if (activeNotes[code]) {
+                this.props.disptachRemoveNote(code);
+                document.getElementById(codes[code].name).classList.remove('active');
+            }
+            
+        });
     }
+
+    // handleKeyDown(e) {
+    //     const code = e.keyCode ? e.keyCode : e.which;
+    //     const activeNotes = this.props.activeNotes;
+
+    //     if (!activeNotes[code] && codes[code]) {
+    //         let id = codes[code].id;
+    //         let octave = document.getElementById('octave').value;
+    //         let frequency = codes[code].frequency * Math.pow(2, octave);
+    //         let waveform = document.getElementById('waveform').value;
+    //         let volume = document.getElementById('volume').value;
+    //         let distortion = document.getElementById('distortion').value;
+    //         let sustain = document.getElementById('sustain').value;
+    //         let note = new Note(id, frequency, this.audioContext, waveform, volume, distortion, sustain);
+    //         this.activeNotes[code] = note;
+    //         document.getElementById(codes[code].name).classList.add('active');
+    //         note.start();
+    //     }
+        
+    //     this.checkChord();    
+    // }
     
-    handleKeyUp(e) {
-        let code = e.keyCode ? e.keyCode : e.which;
-        if (this.activeNotes[code]) {
-            this.activeNotes[code].stop();
-            this.activeNotes[code] = null;
-            document.getElementById(codes[code].name).classList.remove('active');
-        }
-    }
+    // handleKeyUp(e) {
+    //     let code = e.keyCode ? e.keyCode : e.which;
+    //     if (this.activeNotes[code]) {
+    //         this.activeNotes[code].stop();
+    //         this.activeNotes[code] = null;
+    //         document.getElementById(codes[code].name).classList.remove('active');
+    //     }
+    // }
     
     checkChord() {
         var count = 0;
@@ -81,6 +116,10 @@ class Functionality extends Component {
         }
     
         function major(id1, id2, id3) {
+            console.log("id1: ", id1);
+            console.log("id2: ", id2);
+            console.log("id3: ", id3);
+
             const firstDiff = id2-id1;
             const secondDiff = id3-id2;
             return firstDiff === 4 && secondDiff === 3 ||
@@ -89,6 +128,10 @@ class Functionality extends Component {
         }
         
         function minor(id1, id2, id3) {
+            console.log("id1: ", id1);
+            console.log("id2: ", id2);
+            console.log("id3: ", id3);
+
             const firstDiff = id2-id1;
             const secondDiff = id3-id2;
             return firstDiff === 3 && secondDiff === 4 ||
@@ -101,7 +144,7 @@ class Functionality extends Component {
         return (
             <div id="main" className="container-fluid" autoFocus={true} onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabIndex="0">
                 <div className="center title">
-                    <h1 className="center">Synth</h1>
+                    <h1 className="center">WebSynth v1.0</h1>
                 </div>
                 <div id="functionality">
                     <OptionsContainer />
@@ -113,6 +156,17 @@ class Functionality extends Component {
     }
 }
 
-const mapStateToProps = ({sequence}) => ({sequence});
+const mapStateToProps = ({sequence, activeNotes}) => ({sequence, activeNotes});
 
-export default connect(mapStateToProps)(Functionality);
+const mapDispatchToProps = () => dispatch => {
+    return {
+        dispatchAddNote: (code, note) => {
+            dispatch(addNote(code, note));
+        },
+        disptachRemoveNote: (code) => {
+            dispatch(removeNote(code));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Functionality);

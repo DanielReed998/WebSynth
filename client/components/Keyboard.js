@@ -4,13 +4,13 @@ export default function Keyboard() {
     return (
         <div id="keyboard">
         <div id="sharps">
-            <button id="g-sharp" className="sharp-note">g#</button>
-            <button id="a-sharp" className="sharp-note">a#</button>
+            <button id="g-sharp" className="sharp-note"></button>
+            <button id="a-sharp" className="sharp-note"></button>
             <button id="b-sharp" className="fake-sharp-note" />
-            <button id="c-sharp" className="sharp-note">c#</button>
-            <button id="d-sharp" className="sharp-note">d#</button>
+            <button id="c-sharp" className="sharp-note"></button>
+            <button id="d-sharp" className="sharp-note"></button>
             <button id="e-sharp" className="fake-sharp-note" />
-            <button id="f-sharp" className="sharp-note">f#</button>
+            <button id="f-sharp" className="sharp-note"></button>
         </div>
         <div id="regulars">
             <button id="g" className="regular-note">G3</button>
