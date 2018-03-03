@@ -110,7 +110,7 @@ class Functionality extends Component {
         return (
             <div id="main" className="container-fluid" autoFocus={true} onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabIndex="0">
                 <div className="center title">
-                    <h1 className="center">WebSynth v1.0</h1>
+                    <h1 className="center">WebSynth v1</h1>
                 </div>
                 <div id="functionality">
                     <OptionsContainer />

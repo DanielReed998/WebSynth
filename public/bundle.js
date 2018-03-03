@@ -36892,7 +36892,7 @@ function (_Component) {
         className: "center title"
       }, _react.default.createElement("h1", {
         className: "center"
-      }, "WebSynth v1.0")), _react.default.createElement("div", {
+      }, "WebSynth v1")), _react.default.createElement("div", {
         id: "functionality"
       }, _react.default.createElement(_OptionsContainer.default, null), _react.default.createElement(_Keyboard.default, null), _react.default.createElement("div", {
         className: "label-container"
