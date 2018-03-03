@@ -38,8 +38,16 @@ button {
     margin-right: auto;
 }
 
+.label-container {
+    width: 100%;
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
 h1,
-h4 {
+h3,
+h6 {
     color: white;
     padding: 10px;
     border-radius: 5px;
@@ -92,7 +100,11 @@ h4 {
     position: relative;
     height: 16rem;
     width: 32rem;
-    margin: 20px auto;
+    margin: 20px auto 5px auto;
+}
+
+.clear {
+    opacity: 0;
 }
 
 .hidden {

@@ -115,6 +115,9 @@ class Functionality extends Component {
                 <div id="functionality">
                     <OptionsContainer />
                     <Keyboard />
+                    <div className="label-container">
+                        <h6>^These are mapped to keys 'A' through 'K' on your keyboard^</h6>
+                    </div>
                     <Sequencer />
                 </div>
             </div>

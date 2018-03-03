@@ -17,7 +17,7 @@ export default class OptionsContainer extends Component {
         return (
             <div id="options-container" className="center">
                 <div id="wave-img" className="sine">
-                    <img src="/images/sine.jpg" visibility="hidden" />
+                    <img src="/images/sine.jpg" className="clear" />
                 </div>
                 <select id="waveform" onChange={this.handleChange}>
                     <option value="sine">sine</option>

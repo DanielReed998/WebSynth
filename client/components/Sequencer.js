@@ -188,7 +188,7 @@ class Sequencer extends Component {
             const sequenceOptions = this.props.sequence.options;
             return (
                 <div id="sequencer-main">
-                    <h4 className="title">Sequencer</h4>
+                    <h3 className="title">Sequencer</h3>
                     <div id="option-sliders">
                         <div>
                             <label>tempo: </label>
