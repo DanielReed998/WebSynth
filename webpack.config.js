@@ -18,6 +18,7 @@ module.exports = {
       {
         test: /jsx?$/,
         include: resolve(__dirname, './client'),
+        exclude: /(node_modules)/,
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2016']
