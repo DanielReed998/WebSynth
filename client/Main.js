@@ -9,8 +9,6 @@ import Signup from './components/Signup';
 
 import { getSequence } from './reducers/sequence';
 
-import { emptySequenceData, emptySequenceOptions } from './lib/empty-sequence';
-
 // class Main extends Component { 
 export default function Main() {
     // componentDidMount() {

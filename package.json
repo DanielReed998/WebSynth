@@ -38,6 +38,6 @@
         "morgan": "^1.9.0",
         "redux-logger": "^3.0.6",
         "volleyball": "^1.4.1",
-        "webpack": "^3.10.0"
+        "webpack": "^3.11.0"
     }
 }

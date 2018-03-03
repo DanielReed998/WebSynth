@@ -1508,22 +1508,19 @@ module.exports = __webpack_require__(130);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_empty_sequence__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_empty_sequence__ = __webpack_require__(161);
 
 
-
-const defaultState = __WEBPACK_IMPORTED_MODULE_1__lib_empty_sequence__["a" /* default */];
+const defaultState = Object(__WEBPACK_IMPORTED_MODULE_0__scripts_empty_sequence__["a" /* default */])();
 
 /* ACTION TYPES */
 const UPDATE_SEQUENCE = 'UPDATE_SEQUENCE';
 const UPDATE_OPTION = 'UPDATE_OPTION';
 const GET_SEQUENCE = 'GET_SEQUENCE';
+const CLEAR_SEQUENCE = 'CLEAR_SEQUENCE';
 
 /* ACTION CREATORS */
 const updateSequence = (note, beat) => {
-    console.log(note, beat);
     return {
         type: UPDATE_SEQUENCE,
         note,
@@ -1534,7 +1531,6 @@ const updateSequence = (note, beat) => {
 
 
 const updateOption = (option, beat) => {
-    console.log(option, beat);
     return {
         type: UPDATE_OPTION,
         option,
@@ -1550,7 +1546,15 @@ const getSequence = sequence => {
         sequence
     };
 };
-/* harmony export (immutable) */ __webpack_exports__["b"] = getSequence;
+/* unused harmony export getSequence */
+
+
+const clearSequence = () => {
+    return {
+        type: CLEAR_SEQUENCE
+    };
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = clearSequence;
 
 
 /* DISPATCH */
@@ -1606,7 +1610,7 @@ const getSequence = sequence => {
 
 /* REDUCER */
 
-/* harmony default export */ __webpack_exports__["a"] = ((prevSequence = defaultState, action) => {
+/* harmony default export */ __webpack_exports__["b"] = ((prevSequence = defaultState, action) => {
     switch (action.type) {
         case UPDATE_SEQUENCE:
             let updatedSequence = Object.assign({}, prevSequence);
@@ -1616,8 +1620,10 @@ const getSequence = sequence => {
             let updatedOptions = Object.assign({}, prevSequence);
             updatedOptions.options[action.option][action.beat] = !updatedOptions.options[action.option][action.beat];
             return updatedOptions;
+        case CLEAR_SEQUENCE:
+            return Object.assign({}, Object(__WEBPACK_IMPORTED_MODULE_0__scripts_empty_sequence__["a" /* default */])());
         case GET_SEQUENCE:
-            return Object.assign({}, prevSequence, action.sequence);
+            return Object.assign({}, action.sequence);
         default:
             return prevSequence;
     }
@@ -2431,54 +2437,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 32 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function createEmptyBeats(n) {
-    let obj = {};
-    for (let i = 0; i < n; i++) {
-        obj[i] = false;
-    }
-    return obj;
-}
-
-const emptySequenceData = {
-    g: createEmptyBeats(16),
-    gSharp: createEmptyBeats(16),
-    a: createEmptyBeats(16),
-    aSharp: createEmptyBeats(16),
-    b: createEmptyBeats(16),
-    c: createEmptyBeats(16),
-    cSharp: createEmptyBeats(16),
-    d: createEmptyBeats(16),
-    dSharp: createEmptyBeats(16),
-    e: createEmptyBeats(16),
-    f: createEmptyBeats(16),
-    fSharp: createEmptyBeats(16),
-    G: createEmptyBeats(16)
-};
-/* unused harmony export emptySequenceData */
-
-
-const emptySequenceOptions = {
-    accent: createEmptyBeats(16),
-    octaveUp: createEmptyBeats(16),
-    octaveDown: createEmptyBeats(16)
-};
-/* unused harmony export emptySequenceOptions */
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    accent: 30,
-    data: emptySequenceData,
-    name: 'empty sequence table',
-    options: emptySequenceOptions,
-    sustain: 100,
-    tempo: 100
-});
-
-/***/ }),
+/* 32 */,
 /* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5009,216 +4968,8 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 68 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class Note {
-
-    constructor(id, frequency, audioContext, waveform, volume, distortion, sustain) {
-        this.id = id;
-        this.frequency = frequency;
-        this.audioContext = audioContext;
-        this.waveform = waveform;
-        this.volume = volume / 100;
-        this.distortionCurve = distortion;
-        this.sustain = sustain;
-
-        this.osc = audioContext.createOscillator();
-        this.gainNode = audioContext.createGain();
-        this.dist = audioContext.createWaveShaper();
-
-        this.oscillators = [];
-    }
-
-    start() {
-        this.osc.frequency.value = this.frequency;
-        this.gainNode.gain.value = this.volume;
-        this.dist.curve = makeDistortionCurve(parseInt(this.distortionCurve));
-
-        /* Custom waveform will be implemented in v2 */
-
-        // if (this.waveform === 'custom') {
-        //     var real = new Float32Array([-1, -0.5, 0, 0.5, 1]);
-        //     var imag = new Float32Array([1, 0.5, 0, -0.5, -1]);
-
-        //     var wave = this.audioContext.createPeriodicWave(real, imag);         
-        //     this.osc.setPeriodicWave(wave);
-        // } else {
-        //     this.osc.type = this.waveform;   
-        // }
-
-        this.osc.type = this.waveform;
-        this.osc.connect(this.dist);
-        this.dist.connect(this.gainNode);
-        this.gainNode.connect(this.audioContext.destination);
-        this.osc.start(0);
-        this.oscillators.push(this.osc);
-    }
-
-    stop() {
-        this.oscillators.forEach(osc => {
-            this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + this.sustain / 1000);
-            osc.stop(this.audioContext.currentTime + this.sustain / 1000);
-            setTimeout(() => {
-                osc.disconnect();
-            }, this.sustain + 100);
-        });
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Note;
-;
-
-// Distortion only works for sine waveform really, reference for this algorithm:
-//      http://stackoverflow.com/a/22313408/1090298
-
-function makeDistortionCurve(amount) {
-    var k = typeof amount === 'number' ? amount : 0,
-        n_samples = 44100,
-        curve = new Float32Array(n_samples),
-        deg = Math.PI / 180,
-        i = 0,
-        x;
-    for (; i < n_samples; ++i) {
-        x = i * 2 / n_samples - 1;
-        curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
-    }
-    return curve;
-}
-
-/***/ }),
-/* 69 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const codes = {
-    65: {
-        name: 'g',
-        frequency: 196,
-        id: 1
-    },
-    87: {
-        name: 'g-sharp',
-        frequency: 207.7,
-        id: 2
-    },
-    83: {
-        name: 'a',
-        frequency: 220,
-        id: 3
-    },
-    69: {
-        name: 'a-sharp',
-        frequency: 233.1,
-        id: 4
-    },
-    68: {
-        name: 'b',
-        frequency: 246.9,
-        id: 5
-    },
-    70: {
-        name: 'c',
-        frequency: 261.6,
-        id: 6
-    },
-    84: {
-        name: 'c-sharp',
-        frequency: 277.2,
-        id: 7
-    },
-    71: {
-        name: 'd',
-        frequency: 293.7,
-        id: 8
-    },
-    89: {
-        name: 'd-sharp',
-        frequency: 311.1,
-        id: 9
-    },
-    72: {
-        name: 'e',
-        frequency: 329.6,
-        id: 10
-    },
-    74: {
-        name: 'f',
-        frequency: 349.2,
-        id: 11
-    },
-    73: {
-        name: 'f-sharp',
-        frequency: 370,
-        id: 12
-    },
-    75: {
-        name: 'high-g',
-        frequency: 392,
-        id: 13
-    }
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = codes;
-
-
-const noteNames = {
-    g: {
-        code: 65,
-        frequency: 196
-    },
-    gSharp: {
-        code: 87,
-        frequency: 207.7
-    },
-    a: {
-        code: 83,
-        frequency: 220
-    },
-    aSharp: {
-        code: 69,
-        frequency: 233.1
-    },
-    b: {
-        code: 68,
-        frequency: 246.9
-    },
-    c: {
-        code: 70,
-        frequency: 261.6
-    },
-    cSharp: {
-        code: 84,
-        frequency: 277.2
-    },
-    d: {
-        code: 71,
-        frequency: 293.7
-    },
-    dSharp: {
-        code: 89,
-        frequency: 311.1
-    },
-    e: {
-        code: 72,
-        frequency: 329.6
-    },
-    f: {
-        code: 74,
-        frequency: 349.2
-    },
-    fSharp: {
-        code: 73,
-        frequency: 370
-    },
-    G: {
-        code: 75,
-        frequency: 392
-    }
-};
-/* harmony export (immutable) */ __webpack_exports__["b"] = noteNames;
-
-
-/***/ }),
+/* 68 */,
+/* 69 */,
 /* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5228,9 +4979,11 @@ const noteNames = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__activeNotes__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__currentUser__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__users__ = __webpack_require__(33);
-/* unused harmony namespace reexport */
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__sequence__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_1__sequence__["c"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_1__sequence__["d"]; });
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__activeNotes__["a"]; });
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__activeNotes__["c"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__activeNotes__["c"]; });
 /* unused harmony namespace reexport */
 /* unused harmony namespace reexport */
 
@@ -5240,7 +4993,7 @@ const noteNames = {
 
 
 
-/* harmony default export */ __webpack_exports__["b"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["combineReducers"])({ sequence: __WEBPACK_IMPORTED_MODULE_1__sequence__["a" /* default */], activeNotes: __WEBPACK_IMPORTED_MODULE_2__activeNotes__["b" /* default */], currentUser: __WEBPACK_IMPORTED_MODULE_3__currentUser__["a" /* default */], users: __WEBPACK_IMPORTED_MODULE_4__users__["b" /* default */] }));
+/* harmony default export */ __webpack_exports__["c"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["combineReducers"])({ sequence: __WEBPACK_IMPORTED_MODULE_1__sequence__["b" /* default */], activeNotes: __WEBPACK_IMPORTED_MODULE_2__activeNotes__["b" /* default */], currentUser: __WEBPACK_IMPORTED_MODULE_3__currentUser__["a" /* default */], users: __WEBPACK_IMPORTED_MODULE_4__users__["b" /* default */] }));
 
 
 
@@ -26789,9 +26542,6 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Login__ = __webpack_require__(153);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Signup__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__reducers_sequence__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__lib_empty_sequence__ = __webpack_require__(32);
-
-
 
 
 
@@ -27750,8 +27500,8 @@ module.exports = function spread(callback) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Keyboard__ = __webpack_require__(149);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__OptionsContainer__ = __webpack_require__(150);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Sequencer__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_keys__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_Note__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__scripts_keys__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__scripts_Note__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__reducers__ = __webpack_require__(70);
 
 
@@ -27779,17 +27529,17 @@ class Functionality extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
             const code = e.keyCode ? e.keyCode : e.which;
             const activeNotes = this.props.activeNotes;
 
-            if (!activeNotes[code] && __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code]) {
-                let id = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].id;
+            if (!activeNotes[code] && __WEBPACK_IMPORTED_MODULE_5__scripts_keys__["a" /* codes */][code]) {
+                let id = __WEBPACK_IMPORTED_MODULE_5__scripts_keys__["a" /* codes */][code].id;
                 let octave = document.getElementById('octave').value;
-                let frequency = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].frequency * Math.pow(2, octave);
+                let frequency = __WEBPACK_IMPORTED_MODULE_5__scripts_keys__["a" /* codes */][code].frequency * Math.pow(2, octave);
                 let waveform = document.getElementById('waveform').value;
                 let volume = document.getElementById('volume').value;
                 let distortion = document.getElementById('distortion').value;
                 let sustain = document.getElementById('sustain').value;
-                let note = new __WEBPACK_IMPORTED_MODULE_6__lib_Note__["a" /* default */](id, frequency, this.audioContext, waveform, volume, distortion, sustain);
+                let note = new __WEBPACK_IMPORTED_MODULE_6__scripts_Note__["a" /* default */](id, frequency, this.audioContext, waveform, volume, distortion, sustain);
                 this.props.dispatchAddNote(code, note);
-                document.getElementById(__WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].name).classList.add('active');
+                document.getElementById(__WEBPACK_IMPORTED_MODULE_5__scripts_keys__["a" /* codes */][code].name).classList.add('active');
                 note.start();
             }
 
@@ -27802,7 +27552,7 @@ class Functionality extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
             if (activeNotes[code]) {
                 this.props.disptachRemoveNote(code);
-                document.getElementById(__WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].name).classList.remove('active');
+                document.getElementById(__WEBPACK_IMPORTED_MODULE_5__scripts_keys__["a" /* codes */][code].name).classList.remove('active');
             }
         });
     }
@@ -27844,20 +27594,12 @@ class Functionality extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         }
 
         function major(id1, id2, id3) {
-            console.log("id1: ", id1);
-            console.log("id2: ", id2);
-            console.log("id3: ", id3);
-
             const firstDiff = id2 - id1;
             const secondDiff = id3 - id2;
             return firstDiff === 4 && secondDiff === 3 || firstDiff === 3 && secondDiff === 5 || firstDiff === 5 && secondDiff === 4;
         }
 
         function minor(id1, id2, id3) {
-            console.log("id1: ", id1);
-            console.log("id2: ", id2);
-            console.log("id3: ", id3);
-
             const firstDiff = id2 - id1;
             const secondDiff = id3 - id2;
             return firstDiff === 3 && secondDiff === 4 || firstDiff === 4 && secondDiff === 5 || firstDiff === 5 && secondDiff === 3;
@@ -27896,7 +27638,7 @@ const mapDispatchToProps = () => dispatch => {
             dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__reducers__["a" /* addNote */])(code, note));
         },
         disptachRemoveNote: code => {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__reducers__["c" /* removeNote */])(code));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__reducers__["d" /* removeNote */])(code));
         }
     };
 };
@@ -28047,10 +27789,10 @@ class OptionsContainer extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(152);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_classnames__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reducers_sequence__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_Note__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_keys__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_empty_sequence__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reducers__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__scripts_Note__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__scripts_keys__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__scripts_empty_sequence__ = __webpack_require__(161);
 
 
 
@@ -28097,7 +27839,7 @@ class Sequencer extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 //each beat, go through all the notes
                 notes.forEach(note => {
 
-                    let code = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["b" /* noteNames */][note].code;
+                    let code = __WEBPACK_IMPORTED_MODULE_5__scripts_keys__["b" /* noteNames */][note].code;
 
                     //change the background of all the notes in the last beat back to white.
                     let lastBeat = this.beat === 0 ? 15 : this.beat - 1;
@@ -28119,13 +27861,13 @@ class Sequencer extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                     //play any notes that are active
                     if (noteBox.classList.contains('active-note')) {
                         if (!this.activeNotes[code]) {
-                            const id = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].id;
-                            const frequency = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["a" /* codes */][code].frequency * Math.pow(2, octaveSwitch);
+                            const id = __WEBPACK_IMPORTED_MODULE_5__scripts_keys__["a" /* codes */][code].id;
+                            const frequency = __WEBPACK_IMPORTED_MODULE_5__scripts_keys__["a" /* codes */][code].frequency * Math.pow(2, octaveSwitch);
                             const distortion = document.getElementById('distortion-slider').value;
                             const sustain = document.getElementById('sustain-slider').value;
                             const waveform = document.getElementById('sequence-waveform').value;
 
-                            const playNote = new __WEBPACK_IMPORTED_MODULE_4__lib_Note__["a" /* default */](id, frequency, this.audioContext, waveform, volume, distortion, sustain);
+                            const playNote = new __WEBPACK_IMPORTED_MODULE_4__scripts_Note__["a" /* default */](id, frequency, this.audioContext, waveform, volume, distortion, sustain);
                             this.activeNotes[code] = playNote;
                             playNote.start();
                         }
@@ -28145,7 +27887,7 @@ class Sequencer extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
             this.interval = null;
         }
         Object.keys(this.props.sequence.data).forEach(note => {
-            let code = __WEBPACK_IMPORTED_MODULE_5__lib_keys__["b" /* noteNames */][note].code;
+            let code = __WEBPACK_IMPORTED_MODULE_5__scripts_keys__["b" /* noteNames */][note].code;
 
             let noteBox = document.getElementById(`${this.beat}-${note}`);
             let lastBeat = this.beat === 0 ? 15 : this.beat - 1;
@@ -28436,16 +28178,16 @@ const mapStateToProps = ({ sequence }) => ({ sequence });
 const mapDispatchToProps = () => dispatch => {
     return {
         writeNote: (note, beat) => {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers_sequence__["d" /* updateSequence */])(note, beat));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers__["f" /* updateSequence */])(note, beat));
         },
         writeOption: (option, beat) => {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers_sequence__["c" /* updateOption */])(option, beat));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers__["e" /* updateOption */])(option, beat));
         },
         save: updatedSequence => {
             dispatch(saveSequence(updatedSequence));
         },
         clear: () => {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers_sequence__["b" /* getSequence */])(__WEBPACK_IMPORTED_MODULE_6__lib_empty_sequence__["a" /* default */]));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__reducers__["b" /* clearSequence */])());
         }
     };
 };
@@ -28758,18 +28500,20 @@ const mapDispatch = dispatch => {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux_thunk__ = __webpack_require__(156);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_redux_thunk__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_devtools_extension__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_devtools_extension___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_redux_devtools_extension__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reducers__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_logger__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_logger___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_redux_logger__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_devtools_extension__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_devtools_extension___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_redux_devtools_extension__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__reducers__ = __webpack_require__(70);
 
 
-// import logger from 'redux-logger';
+
 
 
 
 //removed logger for now - , composeWithDevTools(applyMiddleware(thunk, logger))
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["createStore"])(__WEBPACK_IMPORTED_MODULE_3__reducers__["b" /* default */]));
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_0_redux__["createStore"])(__WEBPACK_IMPORTED_MODULE_4__reducers__["c" /* default */], Object(__WEBPACK_IMPORTED_MODULE_3_redux_devtools_extension__["composeWithDevTools"])(Object(__WEBPACK_IMPORTED_MODULE_0_redux__["applyMiddleware"])(__WEBPACK_IMPORTED_MODULE_1_redux_thunk___default.a, __WEBPACK_IMPORTED_MODULE_2_redux_logger___default.a))));
 
 /***/ }),
 /* 156 */
@@ -28826,6 +28570,274 @@ exports.devToolsEnhancer = (
     function() { return function(noop) { return noop; } }
 );
 
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {!function(e,t){ true?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t(e.reduxLogger=e.reduxLogger||{})}(this,function(e){"use strict";function t(e,t){e.super_=t,e.prototype=Object.create(t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}})}function r(e,t){Object.defineProperty(this,"kind",{value:e,enumerable:!0}),t&&t.length&&Object.defineProperty(this,"path",{value:t,enumerable:!0})}function n(e,t,r){n.super_.call(this,"E",e),Object.defineProperty(this,"lhs",{value:t,enumerable:!0}),Object.defineProperty(this,"rhs",{value:r,enumerable:!0})}function o(e,t){o.super_.call(this,"N",e),Object.defineProperty(this,"rhs",{value:t,enumerable:!0})}function i(e,t){i.super_.call(this,"D",e),Object.defineProperty(this,"lhs",{value:t,enumerable:!0})}function a(e,t,r){a.super_.call(this,"A",e),Object.defineProperty(this,"index",{value:t,enumerable:!0}),Object.defineProperty(this,"item",{value:r,enumerable:!0})}function f(e,t,r){var n=e.slice((r||t)+1||e.length);return e.length=t<0?e.length+t:t,e.push.apply(e,n),e}function u(e){var t="undefined"==typeof e?"undefined":N(e);return"object"!==t?t:e===Math?"math":null===e?"null":Array.isArray(e)?"array":"[object Date]"===Object.prototype.toString.call(e)?"date":"function"==typeof e.toString&&/^\/.*\//.test(e.toString())?"regexp":"object"}function l(e,t,r,c,s,d,p){s=s||[],p=p||[];var g=s.slice(0);if("undefined"!=typeof d){if(c){if("function"==typeof c&&c(g,d))return;if("object"===("undefined"==typeof c?"undefined":N(c))){if(c.prefilter&&c.prefilter(g,d))return;if(c.normalize){var h=c.normalize(g,d,e,t);h&&(e=h[0],t=h[1])}}}g.push(d)}"regexp"===u(e)&&"regexp"===u(t)&&(e=e.toString(),t=t.toString());var y="undefined"==typeof e?"undefined":N(e),v="undefined"==typeof t?"undefined":N(t),b="undefined"!==y||p&&p[p.length-1].lhs&&p[p.length-1].lhs.hasOwnProperty(d),m="undefined"!==v||p&&p[p.length-1].rhs&&p[p.length-1].rhs.hasOwnProperty(d);if(!b&&m)r(new o(g,t));else if(!m&&b)r(new i(g,e));else if(u(e)!==u(t))r(new n(g,e,t));else if("date"===u(e)&&e-t!==0)r(new n(g,e,t));else if("object"===y&&null!==e&&null!==t)if(p.filter(function(t){return t.lhs===e}).length)e!==t&&r(new n(g,e,t));else{if(p.push({lhs:e,rhs:t}),Array.isArray(e)){var w;e.length;for(w=0;w<e.length;w++)w>=t.length?r(new a(g,w,new i(void 0,e[w]))):l(e[w],t[w],r,c,g,w,p);for(;w<t.length;)r(new a(g,w,new o(void 0,t[w++])))}else{var x=Object.keys(e),S=Object.keys(t);x.forEach(function(n,o){var i=S.indexOf(n);i>=0?(l(e[n],t[n],r,c,g,n,p),S=f(S,i)):l(e[n],void 0,r,c,g,n,p)}),S.forEach(function(e){l(void 0,t[e],r,c,g,e,p)})}p.length=p.length-1}else e!==t&&("number"===y&&isNaN(e)&&isNaN(t)||r(new n(g,e,t)))}function c(e,t,r,n){return n=n||[],l(e,t,function(e){e&&n.push(e)},r),n.length?n:void 0}function s(e,t,r){if(r.path&&r.path.length){var n,o=e[t],i=r.path.length-1;for(n=0;n<i;n++)o=o[r.path[n]];switch(r.kind){case"A":s(o[r.path[n]],r.index,r.item);break;case"D":delete o[r.path[n]];break;case"E":case"N":o[r.path[n]]=r.rhs}}else switch(r.kind){case"A":s(e[t],r.index,r.item);break;case"D":e=f(e,t);break;case"E":case"N":e[t]=r.rhs}return e}function d(e,t,r){if(e&&t&&r&&r.kind){for(var n=e,o=-1,i=r.path?r.path.length-1:0;++o<i;)"undefined"==typeof n[r.path[o]]&&(n[r.path[o]]="number"==typeof r.path[o]?[]:{}),n=n[r.path[o]];switch(r.kind){case"A":s(r.path?n[r.path[o]]:n,r.index,r.item);break;case"D":delete n[r.path[o]];break;case"E":case"N":n[r.path[o]]=r.rhs}}}function p(e,t,r){if(r.path&&r.path.length){var n,o=e[t],i=r.path.length-1;for(n=0;n<i;n++)o=o[r.path[n]];switch(r.kind){case"A":p(o[r.path[n]],r.index,r.item);break;case"D":o[r.path[n]]=r.lhs;break;case"E":o[r.path[n]]=r.lhs;break;case"N":delete o[r.path[n]]}}else switch(r.kind){case"A":p(e[t],r.index,r.item);break;case"D":e[t]=r.lhs;break;case"E":e[t]=r.lhs;break;case"N":e=f(e,t)}return e}function g(e,t,r){if(e&&t&&r&&r.kind){var n,o,i=e;for(o=r.path.length-1,n=0;n<o;n++)"undefined"==typeof i[r.path[n]]&&(i[r.path[n]]={}),i=i[r.path[n]];switch(r.kind){case"A":p(i[r.path[n]],r.index,r.item);break;case"D":i[r.path[n]]=r.lhs;break;case"E":i[r.path[n]]=r.lhs;break;case"N":delete i[r.path[n]]}}}function h(e,t,r){if(e&&t){var n=function(n){r&&!r(e,t,n)||d(e,t,n)};l(e,t,n)}}function y(e){return"color: "+F[e].color+"; font-weight: bold"}function v(e){var t=e.kind,r=e.path,n=e.lhs,o=e.rhs,i=e.index,a=e.item;switch(t){case"E":return[r.join("."),n,"→",o];case"N":return[r.join("."),o];case"D":return[r.join(".")];case"A":return[r.join(".")+"["+i+"]",a];default:return[]}}function b(e,t,r,n){var o=c(e,t);try{n?r.groupCollapsed("diff"):r.group("diff")}catch(e){r.log("diff")}o?o.forEach(function(e){var t=e.kind,n=v(e);r.log.apply(r,["%c "+F[t].text,y(t)].concat(P(n)))}):r.log("—— no diff ——");try{r.groupEnd()}catch(e){r.log("—— diff end —— ")}}function m(e,t,r,n){switch("undefined"==typeof e?"undefined":N(e)){case"object":return"function"==typeof e[n]?e[n].apply(e,P(r)):e[n];case"function":return e(t);default:return e}}function w(e){var t=e.timestamp,r=e.duration;return function(e,n,o){var i=["action"];return i.push("%c"+String(e.type)),t&&i.push("%c@ "+n),r&&i.push("%c(in "+o.toFixed(2)+" ms)"),i.join(" ")}}function x(e,t){var r=t.logger,n=t.actionTransformer,o=t.titleFormatter,i=void 0===o?w(t):o,a=t.collapsed,f=t.colors,u=t.level,l=t.diff,c="undefined"==typeof t.titleFormatter;e.forEach(function(o,s){var d=o.started,p=o.startedTime,g=o.action,h=o.prevState,y=o.error,v=o.took,w=o.nextState,x=e[s+1];x&&(w=x.prevState,v=x.started-d);var S=n(g),k="function"==typeof a?a(function(){return w},g,o):a,j=D(p),E=f.title?"color: "+f.title(S)+";":"",A=["color: gray; font-weight: lighter;"];A.push(E),t.timestamp&&A.push("color: gray; font-weight: lighter;"),t.duration&&A.push("color: gray; font-weight: lighter;");var O=i(S,j,v);try{k?f.title&&c?r.groupCollapsed.apply(r,["%c "+O].concat(A)):r.groupCollapsed(O):f.title&&c?r.group.apply(r,["%c "+O].concat(A)):r.group(O)}catch(e){r.log(O)}var N=m(u,S,[h],"prevState"),P=m(u,S,[S],"action"),C=m(u,S,[y,h],"error"),F=m(u,S,[w],"nextState");if(N)if(f.prevState){var L="color: "+f.prevState(h)+"; font-weight: bold";r[N]("%c prev state",L,h)}else r[N]("prev state",h);if(P)if(f.action){var T="color: "+f.action(S)+"; font-weight: bold";r[P]("%c action    ",T,S)}else r[P]("action    ",S);if(y&&C)if(f.error){var M="color: "+f.error(y,h)+"; font-weight: bold;";r[C]("%c error     ",M,y)}else r[C]("error     ",y);if(F)if(f.nextState){var _="color: "+f.nextState(w)+"; font-weight: bold";r[F]("%c next state",_,w)}else r[F]("next state",w);l&&b(h,w,r,k);try{r.groupEnd()}catch(e){r.log("—— log end ——")}})}function S(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},t=Object.assign({},L,e),r=t.logger,n=t.stateTransformer,o=t.errorTransformer,i=t.predicate,a=t.logErrors,f=t.diffPredicate;if("undefined"==typeof r)return function(){return function(e){return function(t){return e(t)}}};if(e.getState&&e.dispatch)return console.error("[redux-logger] redux-logger not installed. Make sure to pass logger instance as middleware:\n// Logger with default options\nimport { logger } from 'redux-logger'\nconst store = createStore(\n  reducer,\n  applyMiddleware(logger)\n)\n// Or you can create your own logger with custom options http://bit.ly/redux-logger-options\nimport createLogger from 'redux-logger'\nconst logger = createLogger({\n  // ...options\n});\nconst store = createStore(\n  reducer,\n  applyMiddleware(logger)\n)\n"),function(){return function(e){return function(t){return e(t)}}};var u=[];return function(e){var r=e.getState;return function(e){return function(l){if("function"==typeof i&&!i(r,l))return e(l);var c={};u.push(c),c.started=O.now(),c.startedTime=new Date,c.prevState=n(r()),c.action=l;var s=void 0;if(a)try{s=e(l)}catch(e){c.error=o(e)}else s=e(l);c.took=O.now()-c.started,c.nextState=n(r());var d=t.diff&&"function"==typeof f?f(r,l):t.diff;if(x(u,Object.assign({},t,{diff:d})),u.length=0,c.error)throw c.error;return s}}}}var k,j,E=function(e,t){return new Array(t+1).join(e)},A=function(e,t){return E("0",t-e.toString().length)+e},D=function(e){return A(e.getHours(),2)+":"+A(e.getMinutes(),2)+":"+A(e.getSeconds(),2)+"."+A(e.getMilliseconds(),3)},O="undefined"!=typeof performance&&null!==performance&&"function"==typeof performance.now?performance:Date,N="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},P=function(e){if(Array.isArray(e)){for(var t=0,r=Array(e.length);t<e.length;t++)r[t]=e[t];return r}return Array.from(e)},C=[];k="object"===("undefined"==typeof global?"undefined":N(global))&&global?global:"undefined"!=typeof window?window:{},j=k.DeepDiff,j&&C.push(function(){"undefined"!=typeof j&&k.DeepDiff===c&&(k.DeepDiff=j,j=void 0)}),t(n,r),t(o,r),t(i,r),t(a,r),Object.defineProperties(c,{diff:{value:c,enumerable:!0},observableDiff:{value:l,enumerable:!0},applyDiff:{value:h,enumerable:!0},applyChange:{value:d,enumerable:!0},revertChange:{value:g,enumerable:!0},isConflict:{value:function(){return"undefined"!=typeof j},enumerable:!0},noConflict:{value:function(){return C&&(C.forEach(function(e){e()}),C=null),c},enumerable:!0}});var F={E:{color:"#2196F3",text:"CHANGED:"},N:{color:"#4CAF50",text:"ADDED:"},D:{color:"#F44336",text:"DELETED:"},A:{color:"#2196F3",text:"ARRAY:"}},L={level:"log",logger:console,logErrors:!0,collapsed:void 0,predicate:void 0,duration:!1,timestamp:!0,stateTransformer:function(e){return e},actionTransformer:function(e){return e},errorTransformer:function(e){return e},colors:{title:function(){return"inherit"},prevState:function(){return"#9E9E9E"},action:function(){return"#03A9F4"},nextState:function(){return"#4CAF50"},error:function(){return"#F20404"}},diff:!1,diffPredicate:void 0,transformer:void 0},T=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},t=e.dispatch,r=e.getState;return"function"==typeof t||"function"==typeof r?S()({dispatch:t,getState:r}):void console.error("\n[redux-logger v3] BREAKING CHANGE\n[redux-logger v3] Since 3.0.0 redux-logger exports by default logger with default settings.\n[redux-logger v3] Change\n[redux-logger v3] import createLogger from 'redux-logger'\n[redux-logger v3] to\n[redux-logger v3] import { createLogger } from 'redux-logger'\n")};e.defaults=L,e.createLogger=S,e.logger=T,e.default=T,Object.defineProperty(e,"__esModule",{value:!0})});
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(58)))
+
+/***/ }),
+/* 159 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Note {
+
+    constructor(id, frequency, audioContext, waveform, volume, distortion, sustain){
+        this.id = id;
+        this.frequency = frequency;
+        this.audioContext = audioContext;
+        this.waveform = waveform;
+        this.volume = volume / 100;
+        this.distortionCurve = distortion;
+        this.sustain = sustain;
+
+        this.osc = audioContext.createOscillator();
+        this.gainNode = audioContext.createGain();
+        this.dist = audioContext.createWaveShaper();
+        
+        this.oscillators = [];
+    }
+    
+    start() {
+        this.osc.frequency.value = this.frequency;
+        this.gainNode.gain.value = this.volume;
+        this.dist.curve = makeDistortionCurve(parseInt(this.distortionCurve));
+
+        /* Custom waveform will be implemented in v2 */
+
+        // if (this.waveform === 'custom') {
+        //     var real = new Float32Array([-1, -0.5, 0, 0.5, 1]);
+        //     var imag = new Float32Array([1, 0.5, 0, -0.5, -1]);
+     
+        //     var wave = this.audioContext.createPeriodicWave(real, imag);         
+        //     this.osc.setPeriodicWave(wave);
+        // } else {
+        //     this.osc.type = this.waveform;   
+        // }
+
+        this.osc.type = this.waveform;
+        this.osc.connect(this.dist);
+        this.dist.connect(this.gainNode);
+        this.gainNode.connect(this.audioContext.destination)
+        this.osc.start(0);
+        this.oscillators.push(this.osc);
+    }
+
+    stop() {
+        this.oscillators.forEach(osc => { 
+            this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + (this.sustain / 1000));
+            osc.stop(this.audioContext.currentTime + (this.sustain / 1000));
+            setTimeout(() => {
+                osc.disconnect();
+            }, (this.sustain + 100));
+        })
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Note;
+;
+
+// Distortion only works for sine waveform really, reference for this algorithm:
+//      http://stackoverflow.com/a/22313408/1090298
+
+function makeDistortionCurve( amount ) {
+    var k = typeof amount === 'number' ? amount : 0,
+      n_samples = 44100,
+      curve = new Float32Array(n_samples),
+      deg = Math.PI / 180,
+      i = 0,
+      x;
+    for ( ; i < n_samples; ++i ) {
+      x = i * 2 / n_samples - 1;
+      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+    }
+    return curve;
+}
+
+/***/ }),
+/* 160 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const codes = {
+    65: {
+        name: 'g',
+        frequency: 196,
+        id: 1
+    },
+    87: {
+        name: 'g-sharp',
+        frequency: 207.7,
+        id: 2
+    },
+    83: {
+        name: 'a',
+        frequency: 220,
+        id: 3
+    },
+    69: {
+        name: 'a-sharp',
+        frequency: 233.1,
+        id: 4
+    },
+    68: {
+        name: 'b',
+        frequency: 246.9,
+        id: 5
+    },
+    70: {
+        name: 'c',
+        frequency: 261.6,
+        id: 6
+    },
+    84: {
+        name: 'c-sharp',
+        frequency: 277.2,
+        id: 7
+    },
+    71: {
+        name: 'd',
+        frequency: 293.7,
+        id: 8
+    },
+    89: {
+        name: 'd-sharp',
+        frequency: 311.1,
+        id: 9
+    },
+    72: {
+        name: 'e',
+        frequency: 329.6,
+        id: 10
+    },
+    74: {
+        name: 'f',
+        frequency: 349.2,
+        id: 11
+    },
+    73: {
+        name: 'f-sharp',
+        frequency: 370,
+        id: 12
+    },
+    75: {
+        name: 'high-g',
+        frequency: 392,
+        id: 13
+    }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = codes;
+
+
+const noteNames = {
+    g: {
+        code: 65,
+        frequency: 196
+    },
+    gSharp: {
+        code: 87,
+        frequency: 207.7
+    },
+    a: {
+        code: 83,
+        frequency: 220
+    },
+    aSharp: {
+        code: 69,
+        frequency: 233.1
+    },
+    b: {
+        code: 68,
+        frequency: 246.9
+    },
+    c: {
+        code: 70,
+        frequency: 261.6
+    },
+    cSharp: {
+        code: 84,
+        frequency: 277.2
+    },
+    d: {
+        code: 71,
+        frequency: 293.7
+    },
+    dSharp: {
+        code: 89,
+        frequency: 311.1
+    },
+    e: {
+        code: 72,
+        frequency: 329.6
+    },
+    f: {
+        code: 74,
+        frequency: 349.2
+    },
+    fSharp: {
+        code: 73,
+        frequency: 370
+    },
+    G: {
+        code: 75,
+        frequency: 392
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["b"] = noteNames;
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function createEmptyBeats(n) {
+    let obj = {};
+    for (let i = 0; i < n; i++) {
+        obj[i] = false;
+    }
+    return obj;
+}
+
+const emptySequenceData = () => {
+    return {
+        g: createEmptyBeats(16),
+        gSharp: createEmptyBeats(16),
+        a: createEmptyBeats(16),
+        aSharp: createEmptyBeats(16),
+        b: createEmptyBeats(16),
+        c: createEmptyBeats(16),
+        cSharp: createEmptyBeats(16),
+        d: createEmptyBeats(16),
+        dSharp: createEmptyBeats(16),
+        e: createEmptyBeats(16),
+        f: createEmptyBeats(16),
+        fSharp: createEmptyBeats(16),
+        G: createEmptyBeats(16)
+    }
+}
+
+const emptySequenceOptions = () => {
+    return {
+        accent: createEmptyBeats(16),
+        octaveUp: createEmptyBeats(16),
+        octaveDown: createEmptyBeats(16)
+    }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (() => {
+    return {
+        accent: 30,
+        data: emptySequenceData(),
+        name: 'empty sequence table',
+        options: emptySequenceOptions(),
+        sustain: 100,
+        tempo: 100
+    }
+});
 
 /***/ })
 /******/ ]);

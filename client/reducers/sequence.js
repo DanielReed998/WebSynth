@@ -1,17 +1,16 @@
-import axios from 'axios';
-import emptySequence from '../lib/empty-sequence';
+import emptySequence from '../../scripts/empty-sequence';
 
-const defaultState = emptySequence;
+const defaultState = emptySequence();
 
 /* ACTION TYPES */
 const UPDATE_SEQUENCE = 'UPDATE_SEQUENCE';
 const UPDATE_OPTION = 'UPDATE_OPTION';
 const GET_SEQUENCE = 'GET_SEQUENCE';
+const CLEAR_SEQUENCE = 'CLEAR_SEQUENCE';
 
 
 /* ACTION CREATORS */ 
 export const updateSequence = (note, beat) => {
-    console.log(note, beat);
     return {
         type: UPDATE_SEQUENCE,
         note,
@@ -20,7 +19,6 @@ export const updateSequence = (note, beat) => {
 }
 
 export const updateOption = (option, beat) => {
-    console.log(option, beat);    
     return {
         type: UPDATE_OPTION,
         option,
@@ -32,6 +30,12 @@ export const getSequence = (sequence) => {
     return {
         type: GET_SEQUENCE,
         sequence
+    }
+}
+
+export const clearSequence = () => {
+    return {
+        type: CLEAR_SEQUENCE
     }
 }
 
@@ -99,8 +103,10 @@ export default (prevSequence = defaultState, action) => {
             let updatedOptions = Object.assign({}, prevSequence);
             updatedOptions.options[action.option][action.beat] = !updatedOptions.options[action.option][action.beat];
             return updatedOptions;
+        case CLEAR_SEQUENCE:
+            return Object.assign({}, emptySequence());
         case GET_SEQUENCE:
-            return Object.assign({}, prevSequence, action.sequence);
+            return Object.assign({}, action.sequence);
         default:
             return prevSequence;
     }

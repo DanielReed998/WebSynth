@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import { updateSequence, updateOption, getSequence } from '../reducers/sequence';
-import Note from '../lib/Note';
-import { codes, noteNames } from '../lib/keys';
-import emptySequence from '../lib/empty-sequence';
+import { updateSequence, updateOption, getSequence, clearSequence } from '../reducers';
+import Note from '../../scripts/Note';
+import { codes, noteNames } from '../../scripts/keys';
+import emptySequence from '../../scripts/empty-sequence';
 
 class Sequencer extends Component {
 
@@ -323,7 +323,7 @@ const mapDispatchToProps = () => dispatch => {
             dispatch(saveSequence(updatedSequence))
         },
         clear: () => {
-            dispatch(getSequence(emptySequence));
+            dispatch(clearSequence());
         }
     };
 };

@@ -5,8 +5,8 @@ import Keyboard from './Keyboard';
 import OptionsContainer from './OptionsContainer';
 import Sequencer from './Sequencer';
 
-import { codes } from '../lib/keys';
-import Note from '../lib/Note'; 
+import { codes } from '../../scripts/keys';
+import Note from '../../scripts/Note'; 
 import { addNote, removeNote } from '../reducers';
 
 class Functionality extends Component {
@@ -90,10 +90,6 @@ class Functionality extends Component {
         }
     
         function major(id1, id2, id3) {
-            console.log("id1: ", id1);
-            console.log("id2: ", id2);
-            console.log("id3: ", id3);
-
             const firstDiff = id2-id1;
             const secondDiff = id3-id2;
             return firstDiff === 4 && secondDiff === 3 ||
@@ -102,10 +98,6 @@ class Functionality extends Component {
         }
         
         function minor(id1, id2, id3) {
-            console.log("id1: ", id1);
-            console.log("id2: ", id2);
-            console.log("id3: ", id3);
-
             const firstDiff = id2-id1;
             const secondDiff = id3-id2;
             return firstDiff === 3 && secondDiff === 4 ||
