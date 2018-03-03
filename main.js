@@ -2,8 +2,9 @@
 
 // const {db} = require('./server/db/models')
 const app = require('./server')
+const PORT = process.env.PORT || 8080
 
-app.listen(process.env.PORT || 8080, () => console.log(`listening on port ${PORT}`))
+app.listen(PORT, () => console.log(`listening on port ${PORT}`))
 
 /*
 ** Below will be added once backend functionality is up and running.
