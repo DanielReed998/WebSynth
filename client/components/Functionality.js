@@ -42,7 +42,6 @@ class Functionality extends Component {
         });
 
         document.addEventListener('keyup', (e) => {
-            console.log('stopped pressing something?')
             const code = e.keyCode ? e.keyCode : e.which;
             const activeNotes = this.props.activeNotes;
 
@@ -53,48 +52,23 @@ class Functionality extends Component {
             
         });
     }
-
-    // handleKeyDown(e) {
-    //     const code = e.keyCode ? e.keyCode : e.which;
-    //     const activeNotes = this.props.activeNotes;
-
-    //     if (!activeNotes[code] && codes[code]) {
-    //         let id = codes[code].id;
-    //         let octave = document.getElementById('octave').value;
-    //         let frequency = codes[code].frequency * Math.pow(2, octave);
-    //         let waveform = document.getElementById('waveform').value;
-    //         let volume = document.getElementById('volume').value;
-    //         let distortion = document.getElementById('distortion').value;
-    //         let sustain = document.getElementById('sustain').value;
-    //         let note = new Note(id, frequency, this.audioContext, waveform, volume, distortion, sustain);
-    //         this.activeNotes[code] = note;
-    //         document.getElementById(codes[code].name).classList.add('active');
-    //         note.start();
-    //     }
-        
-    //     this.checkChord();    
-    // }
-    
-    // handleKeyUp(e) {
-    //     let code = e.keyCode ? e.keyCode : e.which;
-    //     if (this.activeNotes[code]) {
-    //         this.activeNotes[code].stop();
-    //         this.activeNotes[code] = null;
-    //         document.getElementById(codes[code].name).classList.remove('active');
-    //     }
-    // }
     
     checkChord() {
         var count = 0;
         var noteIds = [];
-        Object.keys(this.activeNotes).forEach(key => {
-            if (this.activeNotes[key]) {
+        let activeNotes = this.props.activeNotes;
+        Object.keys(activeNotes).forEach(key => {
+            if (activeNotes[key]) {
                 count++;
-                noteIds.push(this.activeNotes[key].frequency);
+                noteIds.push(activeNotes[key].id);
             }
         })
         if (count === 3) {
-            noteIds.sort();
+            noteIds.sort((a, b) => {
+                if (a < b) return -1;
+                if (a > b) return 1;
+                if (a === b) return 0;
+            });
             let id1 = noteIds[0];
             let id2 = noteIds[1];
             let id3 = noteIds[2];        
